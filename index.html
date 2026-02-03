@@ -1,40 +1,184 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="bg-[#0a0a0a]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RateRight - Freelance Pricing System</title>
+    <title>RateRight Premium - Freelance Pricing</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' },
+                        dark: { 800: '#1c1917', 900: '#0c0a09' }
+                    },
+                    borderRadius: { '3xl': '1.5rem', '4xl': '2rem' }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
-        .card { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .btn-profesi { transition: all 0.2s; border: 1px solid #e5e7eb; }
-        .btn-profesi.active { background-color: black; color: white; border-color: black; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        body { background: radial-gradient(circle at top left, #1c1917, #000000); }
+        .card-glass { background: rgba(28, 25, 23, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .input-glass { background: rgba(0, 0, 0, 0.3) !important; border: 1px solid rgba(251, 191, 36, 0.2) !important; color: white !important; }
+        .input-glass:focus { border-color: #fbbf24 !important; box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.1); }
+        .btn-profesi { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
+        .btn-profesi.active { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: black; font-weight: 700; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-5xl mx-auto">
-        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<body class="p-4 md:p-8 text-stone-200 min-h-screen flex items-center justify-center">
+    <div class="max-w-5xl w-full mx-auto">
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">RateRight</h1>
-                <p class="text-gray-500 italic">"Berhenti rugi tanpa sadar"</p>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight flex items-center">
+                    RateRight<span class="text-gold-400 ml-1">.</span>
+                </h1>
+                <p class="text-stone-400 font-medium italic mt-1 text-sm">"Harga premium untuk skill premium."</p>
             </div>
-            <div id="profesi-container" class="flex flex-wrap gap-2">
-                </div>
+            <div id="profesi-container" class="flex flex-wrap gap-2"></div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-6">
-                <div class="card p-6">
-                    <h2 class="text-lg font-bold mb-4 flex items-center">⏱️ Waktu Kerja (Jam Real)</h2>
-                    <div id="input-jam-container" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div class="md:col-span-7 space-y-6">
+                <div class="card-glass p-6 md:p-8 rounded-4xl shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-gold-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-gold-500/10 rounded-xl text-gold-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
-                    <hr class="my-4">
-                    <div class="flex justify-between items-center pt-2 font-semibold">
-                        <label>Rate per Jam (Rp)</label>
-                        <input type="number" id="rate-jam" value="200000" class="w-32 p-2 border rounded-lg text-right focus:ring-2 focus:ring-black outline-none calc-trigger">
+                        <h2 class="text-xl font-bold text-white">Alokasi Waktu</h2>
+                    </div>
+
+                    <div id="input-jam-container" class="space-y-5 mb-8"></div>
+                    
+                    <div class="pt-6 border-t border-white/5">
+                        <label class="text-sm font-bold text-gold-400 block mb-3 uppercase tracking-wider">Rate Card Anda / Jam</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 font-bold">Rp</span>
+                            <input type="number" id="rate-jam" value="250000" class="input-glass w-full pl-12 p-4 rounded-2xl text-2xl font-bold calc-trigger outline-none">
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button onclick="setRate(150000)" class="px-4 py-2 rounded-full text-xs font-semibold bg-dark-800 text-stone-400 hover:text-gold-400 hover:bg-dark-900 transition">Junior (150k)</button>
+                            <button onclick="setRate(300000)" class="px-4 py-2 rounded-full text-xs font-semibold bg-dark-800 text-stone-400 hover:text-gold-400 hover:bg-dark-900 transition">Pro (300k)</button>
+                            <button onclick="setRate(600000)" class="px-4 py-2 rounded-full text-xs font-semibold bg-gold-500/10 text-gold-400 border border-gold-500/20 hover:bg-gold-500/20 transition">Expert (600k)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-glass p-6 rounded-4xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-stone-700/30 rounded-xl text-stone-300">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </div>
+                        <h2 class="text-lg font-bold text-white">Beban Operasional</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[11px] text-stone-400 font-bold uppercase tracking-wider">Direct Cost</label>
+                            <div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span><input type="number" id="direct-cost" value="100000" class="input-glass w-full pl-8 p-3 rounded-xl text-lg font-semibold calc-trigger"></div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[11px] text-stone-400 font-bold uppercase tracking-wider">Overhead/Job</label>
+                            <div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span><input type="number" id="overhead-cost" value="200000" class="input-glass w-full pl-8 p-3 rounded-xl text-lg font-semibold calc-trigger"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-5 space-y-6">
+                <div class="bg-gradient-to-br from-gold-500 via-gold-600 to-amber-800 p-8 rounded-4xl shadow-2xl text-white relative overflow-hidden h-full flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 p-6 opacity-20 mix-blend-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gold-100/80 text-sm font-bold uppercase tracking-widest mb-2">Potensi Pendapatan</p>
+                        <h2 id="res-premium" class="text-5xl font-black tracking-tight mb-1 drop-shadow-sm">Rp 0</h2>
+                        <p class="text-white/80 text-sm">Harga Sultan (Termasuk Profit & Buffer)</p>
+                    </div>
+
+                    <div class="space-y-4 mt-10">
+                        <div class="bg-black/20 backdrop-blur-md p-5 rounded-2xl border border-white/10">
+                            <div class="flex justify-between items-end mb-1">
+                                <span class="text-xs font-bold text-gold-100 uppercase tracking-wider">Harga Waras (Min.)</span>
+                                <span id="res-aman" class="font-bold text-2xl">Rp 0</span>
+                            </div>
+                            <div class="w-full bg-black/30 h-1.5 rounded-full overflow-hidden"><div class="bg-white h-full w-3/4 opacity-80"></div></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                                <p class="text-[10px] font-bold text-gold-200 uppercase">Gaji Murni</p>
+                                <p id="res-labor-cost" class="text-lg font-bold">Rp 0</p>
+                            </div>
+                            <div class="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                                <p class="text-[10px] font-bold text-gold-200 uppercase">Base Cost</p>
+                                <p id="res-base-cost" class="text-lg font-bold">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="copySummary()" class="mt-8 w-full py-4 bg-white text-amber-900 hover:bg-amber-50 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-lg">Salin Penawaran</button>
+                </div>
+                
+                <p class="text-[10px] text-center text-stone-500 font-medium">© 2024 Visual Story Academy. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dataProfesi = {
+            "Designer": { b1: "Konsep & Riset", v1: 1.5, b2: "Eksekusi Visual", v2: 4, b3: "Revisi Klien", v3: 2, b4: "Finalisasi & Admin", v4: 1 },
+            "Video Editor": { b1: "Management Footage", v1: 2, b2: "Offline & Online Edit", v2: 6, b3: "Revisi & Feedback", v3: 2, b4: "Rendering & Delivery", v4: 1 },
+            "Web Dev": { b1: "Struktur & DB", v1: 3, b2: "Frontend Build", v2: 8, b3: "Testing & Bugfix", v3: 3, b4: "Deploy & Handover", v4: 2 }
+        };
+
+        let profesiAktif = "Designer";
+
+        function renderInputs() {
+            const container = document.getElementById('input-jam-container');
+            const p = dataProfesi[profesiAktif];
+            container.innerHTML = `<div class="grid grid-cols-2 gap-5">${[1,2,3,4].map(i => `<div class="space-y-2"><label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">${p['b'+i]}</label><div class="relative"><input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-4 rounded-2xl text-xl font-bold calc-trigger outline-none text-center"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-stone-500 font-bold">Jam</span></div></div>`).join('')}</div>`;
+            document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
+            calculate();
+        }
+
+        function renderButtons() {
+            const container = document.getElementById('profesi-container');
+            container.innerHTML = Object.keys(dataProfesi).map(prof => `<button onclick="setProfesi('${prof}')" class="btn-profesi px-5 py-2.5 rounded-full text-xs font-bold text-stone-400 ${prof === profesiAktif ? 'active shadow-lg shadow-gold-500/20' : 'hover:text-white hover:bg-white/5'}">${prof.toUpperCase()}</button>`).join('');
+        }
+
+        function setProfesi(prof) { profesiAktif = prof; renderButtons(); renderInputs(); }
+        function setRate(val) { document.getElementById('rate-jam').value = val; calculate(); }
+        function formatRupiah(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
+
+        function calculate() {
+            const j = [1,2,3,4].map(i => parseFloat(document.getElementById('jam-'+i).value) || 0);
+            const rate = parseFloat(document.getElementById('rate-jam').value) || 0;
+            const direct = parseFloat(document.getElementById('direct-cost').value) || 0;
+            const overhead = parseFloat(document.getElementById('overhead-cost').value) || 0;
+            const totalJam = j.reduce((a, b) => a + b, 0);
+            const laborCost = totalJam * rate;
+            const baseCost = laborCost + direct + overhead;
+            document.getElementById('res-labor-cost').innerText = formatRupiah(laborCost);
+            document.getElementById('res-base-cost').innerText = formatRupiah(baseCost);
+            document.getElementById('res-aman').innerText = formatRupiah(baseCost * 1.2);
+            document.getElementById('res-premium').innerText = formatRupiah(baseCost * 1.2 * 1.15);
+        }
+
+        function copySummary() {
+            const sum = `💎 *PENAWARAN EKSKLUSIF (${profesiAktif.toUpperCase()})*\n\nInvestasi untuk kualitas premium:\n\n⭐ *HARGA SULTAN: ${document.getElementById('res-premium').innerText}*\n✅ *Harga Waras: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown: Gaji Murni ${document.getElementById('res-labor-cost').innerText} + Operasional._\n\n*RateRight Premium*`;
+            navigator.clipboard.writeText(sum);
+            alert("Penawaran premium berhasil disalin.");
+        }
+        renderButtons(); renderInputs();
+    </script>
+</body>
+</html>                        <input type="number" id="rate-jam" value="200000" class="w-32 p-2 border rounded-lg text-right focus:ring-2 focus:ring-black outline-none calc-trigger">
                     </div>
                 </div>
 
