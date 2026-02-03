@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RateRight Premium - Freelance Pricing</title>
+    <title>RateRight Visual - Pricing System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
@@ -28,6 +28,9 @@
         .btn-profesi { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
         .btn-profesi.active { background: #f59e0b; border-color: #f59e0b; color: black; font-weight: 800; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
         .btn-profesi:hover:not(.active) { background: rgba(255,255,255,0.05); }
+        /* Animasi profit box */
+        .profit-reveal { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="p-4 md:p-8 text-stone-200 flex flex-col justify-center">
@@ -37,7 +40,7 @@
                 <h1 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
                     RateRight<span class="text-gold-500">.</span>
                 </h1>
-                <p class="text-stone-500 font-medium italic mt-1 text-sm">"Harga premium untuk skill premium."</p>
+                <p class="text-stone-500 font-medium italic mt-1 text-sm">"Pricing Calculator for Visual Creators"</p>
             </div>
             <div id="profesi-container" class="flex flex-wrap gap-2"></div>
         </header>
@@ -46,6 +49,58 @@
             
             <div class="lg:col-span-7 flex flex-col gap-6">
                 
+                <div class="card-glass p-6 rounded-3xl relative">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                        </div>
+                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Project Scope</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Client / Project Name</label>
+                                <input type="text" id="project-name" placeholder="e.g. Wedding Budi & Ani" class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Category</label>
+                                <select class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none bg-black">
+                                    <option>Portrait / Headshot</option>
+                                    <option>Event / Wedding</option>
+                                    <option>Commercial / Ads</option>
+                                    <option>Documentary</option>
+                                    <option>Fashion / Lookbook</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest flex justify-between">
+                                <span>Target Price (Client Budget)</span>
+                                <span class="text-stone-600 italic normal-case">Optional: Input to check margin</span>
+                            </label>
+                            <div class="relative mt-2">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                <input type="number" id="target-price" placeholder="0" class="input-glass w-full pl-9 p-3 rounded-xl text-lg font-bold calc-trigger font-mono placeholder-stone-700">
+                            </div>
+                        </div>
+
+                        <div id="profit-box" class="hidden rounded-xl border p-4 transition-all">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1" id="profit-label">Net Profit Analysis</p>
+                                    <p class="text-xs opacity-70 italic" id="profit-desc">Calculating...</p>
+                                </div>
+                                <div class="text-right">
+                                    <h3 class="text-2xl font-black" id="real-profit">Rp 0</h3>
+                                    <p class="text-[10px] uppercase font-bold tracking-widest mt-1" id="margin-percent">0% Margin</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-glass p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     
@@ -53,22 +108,21 @@
                         <div class="w-8 h-8 rounded-lg bg-gold-500/20 flex items-center justify-center text-gold-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
-                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Alokasi Waktu</h2>
+                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Production Time</h2>
                     </div>
 
-                    <div id="input-jam-container" class="space-y-5 mb-8">
-                        </div>
+                    <div id="input-jam-container" class="space-y-5 mb-8"></div>
                     
                     <div class="pt-6 border-t border-white/5">
-                        <label class="text-xs font-bold text-gold-500 block mb-3 uppercase tracking-widest">Rate Card / Jam</label>
+                        <label class="text-xs font-bold text-gold-500 block mb-3 uppercase tracking-widest">Your Rate / Hour</label>
                         <div class="relative mb-4">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-500 font-bold">Rp</span>
                             <input type="number" id="rate-jam" value="250000" class="input-glass w-full pl-12 p-4 rounded-xl text-2xl font-bold calc-trigger outline-none font-mono">
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button onclick="setRate(150000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Junior (150k)</button>
-                            <button onclick="setRate(300000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Pro (300k)</button>
-                            <button onclick="setRate(600000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-gold-500/10 text-gold-500 border border-gold-500/20 hover:bg-gold-500/20 transition">Expert (600k)</button>
+                            <button onclick="setRate(150000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Starter (150k)</button>
+                            <button onclick="setRate(350000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Pro (350k)</button>
+                            <button onclick="setRate(750000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-gold-500/10 text-gold-500 border border-gold-500/20 hover:bg-gold-500/20 transition">Expert (750k)</button>
                         </div>
                     </div>
                 </div>
@@ -78,21 +132,21 @@
                         <div class="w-8 h-8 rounded-lg bg-stone-700/50 flex items-center justify-center text-stone-300">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         </div>
-                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Operasional</h2>
+                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Production Cost</h2>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Direct Cost</label>
+                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Direct (Transport/Meals)</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                <input type="number" id="direct-cost" value="100000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
+                                <input type="number" id="direct-cost" value="150000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Overhead/Job</label>
+                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Gear Depreciation/Job</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                <input type="number" id="overhead-cost" value="200000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
+                                <input type="number" id="overhead-cost" value="250000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
                             </div>
                         </div>
                     </div>
@@ -100,7 +154,7 @@
             </div>
 
             <div class="lg:col-span-5 h-full">
-                <div class="bg-gradient-to-b from-gold-500 to-orange-700 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden flex flex-col justify-between min-h-[500px] border-[6px] border-stone-900 ring-1 ring-white/10">
+                <div class="bg-gradient-to-b from-gold-500 to-orange-700 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden flex flex-col justify-between min-h-[500px] border-[6px] border-stone-900 ring-1 ring-white/10 sticky top-8">
                     
                     <div class="absolute top-0 right-0 p-8 opacity-10 mix-blend-soft-light transform rotate-12">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-40 w-40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -109,16 +163,16 @@
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-2 opacity-80">
                             <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.2em]">Potensi Income</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em]">Recommended Price</p>
                         </div>
                         <h2 id="res-premium" class="text-5xl font-black tracking-tight drop-shadow-md mb-1">Rp 0</h2>
-                        <p class="text-white/90 text-sm font-medium">Harga Sultan (Buffer + Profit)</p>
+                        <p class="text-white/90 text-sm font-medium">Professional Price (Profit + Buffer)</p>
                     </div>
 
                     <div class="space-y-4 relative z-10 mt-auto">
                         <div class="bg-black/20 backdrop-blur-sm p-5 rounded-2xl border border-white/10">
                             <div class="flex justify-between items-end mb-2">
-                                <span class="text-[10px] font-bold text-white/70 uppercase tracking-widest">Limit Aman (Min.)</span>
+                                <span class="text-[10px] font-bold text-white/70 uppercase tracking-widest">Minimum Price (Safe)</span>
                                 <span id="res-aman" class="font-bold text-2xl">Rp 0</span>
                             </div>
                             <div class="w-full bg-black/20 h-2 rounded-full overflow-hidden">
@@ -128,7 +182,7 @@
 
                         <div class="grid grid-cols-2 gap-3">
                             <div class="bg-black/20 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-                                <p class="text-[10px] font-bold text-gold-200 uppercase mb-1">Gaji Murni</p>
+                                <p class="text-[10px] font-bold text-gold-200 uppercase mb-1">Labor Cost</p>
                                 <p id="res-labor-cost" class="text-lg font-bold">Rp 0</p>
                             </div>
                             <div class="bg-black/20 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
@@ -138,7 +192,7 @@
                         </div>
 
                         <button onclick="copySummary()" class="mt-4 w-full py-4 bg-white text-orange-900 hover:bg-orange-50 rounded-xl font-black text-xs uppercase tracking-[0.15em] transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2">
-                            <span>Salin Penawaran</span>
+                            <span>Copy Quotation</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                         </button>
                     </div>
@@ -151,12 +205,21 @@
 
     <script>
         const dataProfesi = {
-            "Designer": { b1: "Konsep & Riset", v1: 1.5, b2: "Eksekusi Visual", v2: 4, b3: "Revisi Klien", v3: 2, b4: "Finalisasi & Admin", v4: 1 },
-            "Video Editor": { b1: "Management Footage", v1: 2, b2: "Editing Offline/Online", v2: 6, b3: "Revisi & Feedback", v3: 2, b4: "Rendering", v4: 1 },
-            "Web Dev": { b1: "Struktur & DB", v1: 3, b2: "Frontend Build", v2: 8, b3: "Testing & Bugfix", v3: 3, b4: "Deploy & Handover", v4: 2 }
+            "Fotografer": { 
+                b1: "Brief & Konsep", v1: 1, 
+                b2: "Shooting Day", v2: 4, 
+                b3: "Editing/Retouch", v3: 3, 
+                b4: "Delivery/Admin", v4: 1 
+            },
+            "Videografer": { 
+                b1: "Pre-Production", v1: 2, 
+                b2: "Shooting Day", v2: 5, 
+                b3: "Editing & Color", v3: 6, 
+                b4: "Revisi & Render", v4: 2 
+            }
         };
 
-        let profesiAktif = "Designer";
+        let profesiAktif = "Fotografer";
 
         function renderInputs() {
             const container = document.getElementById('input-jam-container');
@@ -181,7 +244,7 @@
         function renderButtons() {
             const container = document.getElementById('profesi-container');
             container.innerHTML = Object.keys(dataProfesi).map(prof => `
-                <button onclick="setProfesi('${prof}')" class="btn-profesi px-4 py-2 rounded-full text-[10px] font-bold text-stone-400 uppercase tracking-wider ${prof === profesiAktif ? 'active' : ''}">
+                <button onclick="setProfesi('${prof}')" class="btn-profesi px-6 py-2.5 rounded-full text-[11px] font-bold text-stone-400 uppercase tracking-wider ${prof === profesiAktif ? 'active' : ''}">
                     ${prof}
                 </button>
             `).join('');
@@ -192,26 +255,66 @@
         function formatRupiah(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
 
         function calculate() {
+            // Inputs
             const j = [1,2,3,4].map(i => parseFloat(document.getElementById('jam-'+i).value) || 0);
             const rate = parseFloat(document.getElementById('rate-jam').value) || 0;
             const direct = parseFloat(document.getElementById('direct-cost').value) || 0;
             const overhead = parseFloat(document.getElementById('overhead-cost').value) || 0;
+            const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
 
+            // Engine
             const totalJam = j.reduce((a, b) => a + b, 0);
             const laborCost = totalJam * rate;
             const baseCost = laborCost + direct + overhead;
-            
-            // Render
+            const safePrice = baseCost * 1.2;
+            const premiumPrice = safePrice * 1.15;
+
+            // Render Results
             document.getElementById('res-labor-cost').innerText = formatRupiah(laborCost);
             document.getElementById('res-base-cost').innerText = formatRupiah(baseCost);
-            document.getElementById('res-aman').innerText = formatRupiah(baseCost * 1.2);
-            document.getElementById('res-premium').innerText = formatRupiah(baseCost * 1.2 * 1.15);
+            document.getElementById('res-aman').innerText = formatRupiah(safePrice);
+            document.getElementById('res-premium').innerText = formatRupiah(premiumPrice);
+
+            // Logic Profit Analysis Box
+            const profitBox = document.getElementById('profit-box');
+            if (targetPrice > 0) {
+                profitBox.classList.remove('hidden');
+                profitBox.classList.add('profit-reveal');
+                
+                const realProfit = targetPrice - baseCost;
+                const margin = ((realProfit / targetPrice) * 100).toFixed(1);
+
+                document.getElementById('real-profit').innerText = formatRupiah(realProfit);
+                document.getElementById('margin-percent').innerText = margin + "% Margin";
+
+                if (realProfit > 0) {
+                    // Untung
+                    profitBox.className = "profit-reveal rounded-xl border p-4 bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
+                    document.getElementById('profit-desc').innerText = "Good job! You are profitable.";
+                    document.getElementById('profit-desc').className = "text-xs opacity-80 italic text-emerald-300";
+                } else {
+                    // Rugi
+                    profitBox.className = "profit-reveal rounded-xl border p-4 bg-red-500/10 border-red-500/30 text-red-400";
+                    document.getElementById('profit-desc').innerText = "Warning: Price is below Base Cost!";
+                    document.getElementById('profit-desc').className = "text-xs opacity-80 italic text-red-300";
+                }
+            } else {
+                profitBox.classList.add('hidden');
+            }
         }
 
         function copySummary() {
-            const sum = `🔥 *PENAWARAN PREMIUM (${profesiAktif.toUpperCase()})*\n\nInvestasi Proyek:\n⭐ *HARGA SULTAN: ${document.getElementById('res-premium').innerText}*\n✅ *Harga Aman: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown Transparan:_\n- Gaji Murni: ${document.getElementById('res-labor-cost').innerText}\n- Base Cost: ${document.getElementById('res-base-cost').innerText}\n\n*Generated by RateRight*`;
+            const projectName = document.getElementById('project-name').value || "Project";
+            const targetPrice = document.getElementById('target-price').value;
+            let targetText = "";
+            
+            if(targetPrice > 0) {
+                targetText = `\n💰 *YOUR BUDGET: ${formatRupiah(targetPrice)}*`;
+            }
+
+            const sum = `📸 *QUOTATION ESTIMATE*\nProject: ${projectName}\n${targetText}\n\nInvestasi Visual yang Disarankan:\n⭐ *PROFESSIONAL: ${document.getElementById('res-premium').innerText}*\n✅ *MINIMUM: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown:_\n- Labor Cost: ${document.getElementById('res-labor-cost').innerText}\n- Base Cost: ${document.getElementById('res-base-cost').innerText}\n\n*Generated by RateRight*`;
             navigator.clipboard.writeText(sum);
-            alert("Siap! Penawaran berhasil dicopy.");
+            alert("Quotation copied to clipboard!");
         }
 
         renderButtons();
