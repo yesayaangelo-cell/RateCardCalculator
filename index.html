@@ -28,9 +28,12 @@
         .btn-profesi { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
         .btn-profesi.active { background: #f59e0b; border-color: #f59e0b; color: black; font-weight: 800; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
         .btn-profesi:hover:not(.active) { background: rgba(255,255,255,0.05); }
-        /* Animasi profit box */
         .profit-reveal { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Scrollbar custom untuk list item */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     </style>
 </head>
 <body class="p-4 md:p-8 text-stone-200 flex flex-col justify-center">
@@ -52,7 +55,7 @@
                 <div class="card-glass p-6 rounded-3xl relative">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                         </div>
                         <h2 class="text-lg font-bold text-white uppercase tracking-wider">Project Scope</h2>
                     </div>
@@ -60,43 +63,63 @@
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Client / Project Name</label>
-                                <input type="text" id="project-name" placeholder="e.g. Wedding Budi & Ani" class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none">
+                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Client Name</label>
+                                <input type="text" id="project-name" placeholder="Client Name" class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Category</label>
-                                <select class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none bg-black">
-                                    <option>Portrait / Headshot</option>
-                                    <option>Event / Wedding</option>
-                                    <option>Commercial / Ads</option>
-                                    <option>Documentary</option>
-                                    <option>Fashion / Lookbook</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="pt-2">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest flex justify-between">
-                                <span>Target Price (Client Budget)</span>
-                                <span class="text-stone-600 italic normal-case">Optional: Input to check margin</span>
-                            </label>
-                            <div class="relative mt-2">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                <input type="number" id="target-price" placeholder="0" class="input-glass w-full pl-9 p-3 rounded-xl text-lg font-bold calc-trigger font-mono placeholder-stone-700">
+                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Target Price (Optional)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                                    <input type="number" id="target-price" placeholder="0" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-bold calc-trigger font-mono placeholder-stone-700">
+                                </div>
                             </div>
                         </div>
 
                         <div id="profit-box" class="hidden rounded-xl border p-4 transition-all">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1" id="profit-label">Net Profit Analysis</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1">Net Profit</p>
                                     <p class="text-xs opacity-70 italic" id="profit-desc">Calculating...</p>
                                 </div>
                                 <div class="text-right">
-                                    <h3 class="text-2xl font-black" id="real-profit">Rp 0</h3>
+                                    <h3 class="text-xl font-black" id="real-profit">Rp 0</h3>
                                     <p class="text-[10px] uppercase font-bold tracking-widest mt-1" id="margin-percent">0% Margin</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-glass p-6 rounded-3xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-stone-700/50 flex items-center justify-center text-stone-300">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                            </div>
+                            <h2 class="text-lg font-bold text-white uppercase tracking-wider">Production Cost</h2>
+                        </div>
+                        <button onclick="addDirectCostItem()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition flex items-center gap-1 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                            Add Item
+                        </button>
+                    </div>
+
+                    <div class="space-y-3 mb-6">
+                        <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Direct Cost List</label>
+                        <div id="direct-cost-list" class="space-y-2 max-h-60 overflow-y-auto custom-scroll pr-2">
+                            </div>
+                        
+                        <div class="flex justify-between items-center pt-3 border-t border-white/5">
+                            <span class="text-xs text-stone-500 font-bold uppercase">Total Direct Cost</span>
+                            <span id="total-direct-display" class="text-sm font-mono font-bold text-white">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Gear Depreciation / Overhead</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
+                            <input type="number" id="overhead-cost" value="250000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
                         </div>
                     </div>
                 </div>
@@ -127,30 +150,6 @@
                     </div>
                 </div>
 
-                <div class="card-glass p-6 rounded-3xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-8 h-8 rounded-lg bg-stone-700/50 flex items-center justify-center text-stone-300">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                        </div>
-                        <h2 class="text-lg font-bold text-white uppercase tracking-wider">Production Cost</h2>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Direct (Transport/Meals)</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                <input type="number" id="direct-cost" value="150000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Gear Depreciation/Job</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                <input type="number" id="overhead-cost" value="250000" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="lg:col-span-5 h-full">
@@ -219,8 +218,62 @@
             }
         };
 
+        // Data Awal Direct Cost
+        let directCostItems = [
+            { name: "Transport (Bensin/Taxi)", value: 100000 },
+            { name: "Makan/Minum Tim", value: 50000 }
+        ];
+
         let profesiAktif = "Fotografer";
 
+        // --- DIRECT COST LOGIC ---
+        function renderDirectCosts() {
+            const list = document.getElementById('direct-cost-list');
+            list.innerHTML = '';
+            let totalDirect = 0;
+
+            directCostItems.forEach((item, index) => {
+                totalDirect += item.value;
+                const row = document.createElement('div');
+                row.className = "flex gap-2 items-center";
+                row.innerHTML = `
+                    <input type="text" value="${item.name}" onchange="updateDirectItem(${index}, 'name', this.value)" class="input-glass w-full p-2.5 rounded-lg text-xs font-semibold outline-none flex-1 placeholder-stone-600" placeholder="Item name">
+                    <div class="relative w-32">
+                        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-stone-500">Rp</span>
+                        <input type="number" value="${item.value}" onchange="updateDirectItem(${index}, 'value', this.value)" class="input-glass w-full pl-8 p-2.5 rounded-lg text-xs font-mono font-bold outline-none text-right">
+                    </div>
+                    <button onclick="removeDirectItem(${index})" class="p-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                `;
+                list.appendChild(row);
+            });
+
+            document.getElementById('total-direct-display').innerText = formatRupiah(totalDirect);
+            calculate(); // Recalculate everything
+        }
+
+        function addDirectCostItem() {
+            directCostItems.push({ name: "", value: 0 });
+            renderDirectCosts();
+        }
+
+        function removeDirectItem(index) {
+            directCostItems.splice(index, 1);
+            renderDirectCosts();
+        }
+
+        function updateDirectItem(index, field, val) {
+            if (field === 'value') val = parseFloat(val) || 0;
+            directCostItems[index][field] = val;
+            if (field === 'value') renderDirectCosts(); // Re-render only if value changes to update totals
+        }
+
+        function getTotalDirectCost() {
+            return directCostItems.reduce((acc, item) => acc + item.value, 0);
+        }
+
+        // --- MAIN LOGIC ---
         function renderInputs() {
             const container = document.getElementById('input-jam-container');
             const p = dataProfesi[profesiAktif];
@@ -255,32 +308,28 @@
         function formatRupiah(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
 
         function calculate() {
-            // Inputs
             const j = [1,2,3,4].map(i => parseFloat(document.getElementById('jam-'+i).value) || 0);
             const rate = parseFloat(document.getElementById('rate-jam').value) || 0;
-            const direct = parseFloat(document.getElementById('direct-cost').value) || 0;
+            const direct = getTotalDirectCost(); // Ambil dari dynamic list
             const overhead = parseFloat(document.getElementById('overhead-cost').value) || 0;
             const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
 
-            // Engine
             const totalJam = j.reduce((a, b) => a + b, 0);
             const laborCost = totalJam * rate;
             const baseCost = laborCost + direct + overhead;
             const safePrice = baseCost * 1.2;
             const premiumPrice = safePrice * 1.15;
 
-            // Render Results
             document.getElementById('res-labor-cost').innerText = formatRupiah(laborCost);
             document.getElementById('res-base-cost').innerText = formatRupiah(baseCost);
             document.getElementById('res-aman').innerText = formatRupiah(safePrice);
             document.getElementById('res-premium').innerText = formatRupiah(premiumPrice);
 
-            // Logic Profit Analysis Box
+            // Profit Check
             const profitBox = document.getElementById('profit-box');
             if (targetPrice > 0) {
                 profitBox.classList.remove('hidden');
                 profitBox.classList.add('profit-reveal');
-                
                 const realProfit = targetPrice - baseCost;
                 const margin = ((realProfit / targetPrice) * 100).toFixed(1);
 
@@ -288,14 +337,12 @@
                 document.getElementById('margin-percent').innerText = margin + "% Margin";
 
                 if (realProfit > 0) {
-                    // Untung
                     profitBox.className = "profit-reveal rounded-xl border p-4 bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                    document.getElementById('profit-desc').innerText = "Good job! You are profitable.";
+                    document.getElementById('profit-desc').innerText = "Safe! You are profitable.";
                     document.getElementById('profit-desc').className = "text-xs opacity-80 italic text-emerald-300";
                 } else {
-                    // Rugi
                     profitBox.className = "profit-reveal rounded-xl border p-4 bg-red-500/10 border-red-500/30 text-red-400";
-                    document.getElementById('profit-desc').innerText = "Warning: Price is below Base Cost!";
+                    document.getElementById('profit-desc').innerText = "Warning: Price below Base Cost!";
                     document.getElementById('profit-desc').className = "text-xs opacity-80 italic text-red-300";
                 }
             } else {
@@ -305,20 +352,18 @@
 
         function copySummary() {
             const projectName = document.getElementById('project-name').value || "Project";
-            const targetPrice = document.getElementById('target-price').value;
-            let targetText = "";
+            const directItemsText = directCostItems.map(i => `- ${i.name}: ${formatRupiah(i.value)}`).join('\n');
             
-            if(targetPrice > 0) {
-                targetText = `\n💰 *YOUR BUDGET: ${formatRupiah(targetPrice)}*`;
-            }
-
-            const sum = `📸 *QUOTATION ESTIMATE*\nProject: ${projectName}\n${targetText}\n\nInvestasi Visual yang Disarankan:\n⭐ *PROFESSIONAL: ${document.getElementById('res-premium').innerText}*\n✅ *MINIMUM: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown:_\n- Labor Cost: ${document.getElementById('res-labor-cost').innerText}\n- Base Cost: ${document.getElementById('res-base-cost').innerText}\n\n*Generated by RateRight*`;
+            const sum = `📸 *QUOTATION ESTIMATE*\nProject: ${projectName}\n\nInvestasi Visual:\n⭐ *PROFESSIONAL: ${document.getElementById('res-premium').innerText}*\n✅ *MINIMUM: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown Cost:_\n- Labor Cost: ${document.getElementById('res-labor-cost').innerText}\n- Direct Cost Total: ${document.getElementById('total-direct-display').innerText}\n${directItemsText}\n\n*Generated by RateRight*`;
             navigator.clipboard.writeText(sum);
-            alert("Quotation copied to clipboard!");
+            alert("Quotation & details copied!");
         }
 
+        // Init
         renderButtons();
         renderInputs();
+        renderDirectCosts(); // Render list awal
+        document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
     </script>
 </body>
 </html>
