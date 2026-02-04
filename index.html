@@ -34,7 +34,7 @@
         .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
         
-        /* Login Overlay */
+        /* Login Overlay Style */
         #login-overlay { transition: opacity 0.5s ease-out, visibility 0.5s; }
         .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
@@ -342,14 +342,17 @@
         };
         
         // --- AUTH CONFIG ---
-        const SECRET_PASS = "VISUALSTORY"; // Ganti Password Disini
+        // Password Asli: r4t3c4rd
+        // Ini versi Base64 biar ga kebaca langsung (cjR0M2M0cmQ=)
+        const SECRET_HASH = "cjR0M2M0cmQ="; 
         
         function checkLogin(e) {
             e.preventDefault();
             const input = document.getElementById('password-input').value;
             const errMsg = document.getElementById('error-msg');
             
-            if (input === SECRET_PASS) {
+            // Kita encode input user, lalu bandingkan dengan hash rahasia
+            if (btoa(input) === SECRET_HASH) {
                 localStorage.setItem('golden_access', 'true');
                 unlockApp();
             } else {
