@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/global",
+      "destination": "/golden-global.html"
+    },
+    {
+      "source": "/en",
+      "destination": "/golden-global.html"
+    },
+    {
+      "source": "/us",
+      "destination": "/golden-global.html"
+    }
+  ]
+}
