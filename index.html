@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="id" class="bg-[#050505]">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>GoldenHour - Visual Pricing System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="title" content="GoldenHour - Visual Pricing System">
+    <meta name="description" content="Professional Pricing Calculator for Visual Creators & Freelancers.">
+    <meta name="theme-color" content="#0c0a09" id="theme-meta">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GoldenHour - Visual Pricing System">
+    <meta property="og:description" content="Hitung rate jasa visualmu dengan sistem batas boncos dan golden price.">
+    <meta property="og:image" content="https://yourlink.com/preview-image.jpg"> <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -20,26 +30,37 @@
             }
         }
     </script>
+
     <style>
-        body { background: radial-gradient(circle at top left, #1a1614, #000000); min-height: 100vh; }
-        .card-glass { background: rgba(28, 25, 23, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .input-glass { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; transition: all 0.2s; }
-        .input-glass:focus { border-color: #f59e0b !important; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
-        .btn-profesi { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
-        .btn-profesi.active { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: black; font-weight: 800; box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
-        .btn-profesi:hover:not(.active) { background: rgba(255,255,255,0.05); }
-        .profit-reveal { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        /* Smooth Transition for all color changes */
+        * { transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease; }
         
-        /* Login Overlay Style */
+        body { min-height: 100vh; }
+        
+        /* Background Logic */
+        .dark body { background: radial-gradient(circle at top left, #1a1614, #000000); }
+        html:not(.dark) body { background: radial-gradient(circle at top left, #f8fafc, #f1f5f9); }
+
+        /* Card Adaptation */
+        .card-glass { backdrop-filter: blur(16px); }
+        .dark .card-glass { background: rgba(28, 25, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); }
+        html:not(.dark) .card-glass { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 40px -15px rgba(0,0,0,0.08); }
+
+        /* Input Adaptation */
+        .input-glass { outline: none !important; }
+        .dark .input-glass { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
+        html:not(.dark) .input-glass { background: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; color: #0f172a !important; }
+        .input-glass:focus { border-color: #f59e0b !important; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+
+        /* Active Button Logic */
+        .btn-profesi.active { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: black !important; font-weight: 800; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
+        
         #login-overlay { transition: opacity 0.5s ease-out, visibility 0.5s; }
         .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
 </head>
-<body class="p-4 md:p-8 text-stone-200 flex flex-col justify-center overflow-x-hidden">
+
+<body class="p-4 md:p-8 text-slate-800 dark:text-stone-200 flex flex-col justify-center overflow-x-hidden">
 
     <div id="login-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
@@ -47,60 +68,69 @@
             <div class="w-16 h-16 bg-gold-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-gold-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
             </div>
-            <h2 class="text-2xl font-black text-white mb-2">Member Access</h2>
-            <p class="text-stone-500 text-sm mb-8">Enter access code to unlock GoldenHour.</p>
-            
+            <h2 class="text-2xl font-black text-white mb-2">GoldenHour Access</h2>
+            <p class="text-stone-500 text-sm mb-8">Masukkan kode akses untuk membuka sistem.</p>
             <form onsubmit="checkLogin(event)" class="space-y-4">
-                <input type="password" id="password-input" placeholder="Enter Access Code" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-center text-white outline-none focus:border-gold-500 transition tracking-widest text-lg placeholder-stone-700">
+                <input type="password" id="password-input" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-center text-white outline-none focus:border-gold-500 transition tracking-[0.5em] text-lg">
                 <button type="submit" class="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gold-500 transition uppercase tracking-widest text-xs">Unlock System</button>
             </form>
-            <p id="error-msg" class="text-red-500 text-xs mt-4 hidden font-bold">Access Denied. Wrong Code.</p>
+            <p id="error-msg" class="text-red-500 text-xs mt-4 hidden font-bold italic">Access Denied. Wrong Code.</p>
         </div>
     </div>
 
-    <div id="main-app" class="max-w-6xl w-full mx-auto relative z-10 transition-all duration-700 blur-sm opacity-50 pointer-events-none">
-        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
-            <div>
-                <h1 class="text-4xl font-black text-white tracking-tighter flex items-center gap-1">
-                    GoldenHour<span class="text-gold-500 text-5xl">.</span>
-                </h1>
-                <p class="text-stone-500 font-medium italic mt-1 text-sm tracking-wide">"Pricing Calculator for Visual Creators"</p>
+    <div id="main-app" class="max-w-6xl w-full mx-auto relative z-10 blur-sm opacity-50 pointer-events-none">
+        
+        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-6">
+            <div class="flex justify-between items-center w-full md:w-auto">
+                <div>
+                    <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter flex items-center gap-1">
+                        GoldenHour<span class="text-gold-500 text-5xl">.</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium italic mt-1 text-sm tracking-wide">"Visual Pricing System for Creators"</p>
+                </div>
+                
+                <button onclick="toggleTheme()" class="md:hidden p-3 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-stone-200 border border-slate-200 dark:border-white/10">
+                    <svg id="theme-icon-m" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>
+                </button>
             </div>
-            <div id="profesi-container" class="flex flex-wrap gap-2"></div>
+
+            <div class="flex items-center gap-4">
+                <div id="profesi-container" class="flex flex-wrap gap-2"></div>
+                <button onclick="toggleTheme()" class="hidden md:block p-3 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-stone-200 border border-slate-200 dark:border-white/10 hover:border-gold-500 transition-colors">
+                    <svg id="theme-icon-d" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>
+                </button>
+            </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
             <div class="lg:col-span-7 flex flex-col gap-6">
-                
-                <div class="card-glass p-6 rounded-3xl relative">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                <div class="card-glass p-6 rounded-3xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </div>
-                        <h2 class="text-sm font-bold text-white uppercase tracking-widest">Project Scope</h2>
+                        <h2 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Project Scope</h2>
                     </div>
                     
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Client Name</label>
-                                <input type="text" id="project-name" placeholder="Nama Klien / Brand" class="input-glass w-full p-3 rounded-xl text-sm font-semibold outline-none placeholder-stone-700">
+                                <label class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Client / Brand Name</label>
+                                <input type="text" id="project-name" placeholder="Siapa klienmu?" class="input-glass w-full p-4 rounded-xl text-sm font-semibold">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Target Budget (Optional)</label>
+                                <label class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Target Budget (Optional)</label>
                                 <div class="relative">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                                    <input type="number" id="target-price" placeholder="0" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-bold calc-trigger font-mono placeholder-stone-700">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-slate-400">Rp</span>
+                                    <input type="number" id="target-price" placeholder="0" class="input-glass w-full pl-10 p-4 rounded-xl text-sm font-bold calc-trigger font-mono">
                                 </div>
                             </div>
                         </div>
-
-                        <div id="profit-box" class="hidden rounded-xl border p-4 transition-all">
+                        <div id="profit-box" class="hidden rounded-2xl border p-5 transition-all">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1">Net Profit Check</p>
-                                    <p class="text-xs opacity-70 italic" id="profit-desc">Calculating...</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-70">Real Profit Analysis</p>
+                                    <p class="text-xs italic" id="profit-desc">Calculating...</p>
                                 </div>
                                 <div class="text-right">
                                     <h3 class="text-xl font-black" id="real-profit">Rp 0</h3>
@@ -112,360 +142,221 @@
                 </div>
 
                 <div class="card-glass p-6 rounded-3xl">
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-stone-700/50 flex items-center justify-center text-stone-300">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-stone-700/50 flex items-center justify-center text-slate-600 dark:text-stone-300">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-white uppercase tracking-widest">Production Cost</h2>
+                            <h2 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Production Expenses</h2>
                         </div>
-                        <button onclick="addDirectCostItem()" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[10px] font-bold text-stone-300 transition flex items-center gap-1 border border-white/10">
+                        <button onclick="addDirectCostItem()" class="px-4 py-2 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-500 text-[10px] font-black uppercase tracking-wider border border-gold-500/20 hover:bg-gold-500/20 transition">
                             + Add Item
                         </button>
                     </div>
-
-                    <div class="space-y-3 mb-6">
-                        <label class="text-[10px] text-stone-500 font-bold uppercase tracking-widest">Direct Cost List</label>
-                        <div id="direct-cost-list" class="space-y-2 max-h-60 overflow-y-auto custom-scroll pr-2"></div>
-                        <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                            <span class="text-[10px] text-stone-500 font-bold uppercase">Total Direct Cost</span>
-                            <span id="total-direct-display" class="text-xs font-mono font-bold text-stone-300">Rp 0</span>
-                        </div>
+                    <div id="direct-cost-list" class="space-y-3 mb-6"></div>
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-white/5">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Total Direct Cost</span>
+                        <span id="total-direct-display" class="text-sm font-mono font-black text-slate-700 dark:text-stone-300">Rp 0</span>
                     </div>
-
-                    <div class="space-y-2 pt-2 border-t border-white/5">
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 space-y-4">
                         <div class="flex justify-between items-end">
-                            <label class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Gear Depreciation / Job</label>
-                            
-                            <button onclick="toggleModal()" class="text-xs text-gold-500 hover:text-gold-400 font-bold flex items-center gap-1.5 transition px-2 py-1 rounded bg-gold-500/10 hover:bg-gold-500/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
-                                Kalkulator Alat
-                            </button>
-
+                            <label class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Gear Depreciation (Daily)</label>
+                            <button onclick="toggleModal()" class="text-[10px] font-bold text-gold-600 bg-gold-500/10 px-3 py-1.5 rounded-lg">Kalkulator Alat</button>
                         </div>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-stone-500">Rp</span>
-                            <input type="number" id="overhead-cost" value="0" class="input-glass w-full pl-9 p-3 rounded-xl text-sm font-semibold calc-trigger font-mono">
-                        </div>
-                        <p class="text-[10px] text-stone-600 italic">Saran: 1.5% dari total harga alat yang dibawa.</p>
-                    </div>
-                </div>
-
-                <div class="card-glass p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                    
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-8 h-8 rounded-lg bg-gold-500/20 flex items-center justify-center text-gold-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        </div>
-                        <h2 class="text-sm font-bold text-white uppercase tracking-widest">Production Time</h2>
-                    </div>
-
-                    <div id="input-jam-container" class="space-y-5 mb-8 relative z-10"></div>
-                    
-                    <div class="pt-6 border-t border-white/5 relative z-10">
-                        <label class="text-xs font-bold text-gold-500 block mb-3 uppercase tracking-widest">Your Rate / Hour</label>
-                        <div class="relative mb-4">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-500 font-bold">Rp</span>
-                            <input type="number" id="rate-jam" value="250000" class="input-glass w-full pl-12 p-4 rounded-xl text-2xl font-bold calc-trigger outline-none font-mono">
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="setRate(150000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Starter</button>
-                            <button onclick="setRate(350000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-400 transition">Pro</button>
-                            <button onclick="setRate(750000)" class="px-4 py-2 rounded-lg text-xs font-semibold bg-gold-500/10 text-gold-500 border border-gold-500/20 hover:bg-gold-500/20 transition">Expert</button>
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-bold">Rp</span>
+                            <input type="number" id="overhead-cost" value="0" class="input-glass w-full pl-10 p-4 rounded-xl text-sm font-bold calc-trigger font-mono">
                         </div>
                     </div>
                 </div>
 
+                <div class="card-glass p-8 rounded-3xl relative overflow-hidden">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-xl bg-gold-500/10 flex items-center justify-center text-gold-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h2 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Production Time & Labor</h2>
+                    </div>
+                    <div id="input-jam-container" class="space-y-6 mb-10"></div>
+                    <div class="pt-8 border-t border-slate-100 dark:border-white/5">
+                        <label class="text-[10px] font-black text-gold-600 dark:text-gold-500 block mb-4 uppercase tracking-[0.2em]">Hourly Rate (Gaji Per Jam)</label>
+                        <div class="relative mb-6">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black">Rp</span>
+                            <input type="number" id="rate-jam" value="250000" class="input-glass w-full pl-12 p-6 rounded-2xl text-3xl font-black calc-trigger font-mono">
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="setRate(150000)" class="px-5 py-3 rounded-xl text-[10px] font-black bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-stone-400 uppercase tracking-widest hover:bg-gold-500/10 hover:text-gold-600 transition-all">Starter</button>
+                            <button onclick="setRate(350000)" class="px-5 py-3 rounded-xl text-[10px] font-black bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-stone-400 uppercase tracking-widest hover:bg-gold-500/10 hover:text-gold-600 transition-all">Professional</button>
+                            <button onclick="setRate(750000)" class="px-5 py-3 rounded-xl text-[10px] font-black border border-gold-500/30 bg-gold-500/5 text-gold-600 uppercase tracking-widest hover:bg-gold-500 hover:text-white transition-all">Expert</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="lg:col-span-5 h-full">
-                <div class="bg-gradient-to-b from-gold-500 to-orange-800 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden flex flex-col justify-between min-h-[500px] border-[6px] border-stone-900 ring-1 ring-white/10 sticky top-8">
+                <div class="bg-gradient-to-br from-gold-500 to-orange-700 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden flex flex-col justify-between min-h-[550px] border-[8px] border-white dark:border-stone-900 sticky top-8">
                     
-                    <div class="absolute top-0 right-0 p-8 opacity-20 mix-blend-soft-light transform rotate-12">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-48 w-48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div class="absolute -top-10 -right-10 opacity-10 mix-blend-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-64 w-64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
 
                     <div class="relative z-10">
-                        <div class="flex items-center gap-2 mb-2 opacity-90">
-                            <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.2em]">Golden Price</p>
-                        </div>
-                        <h2 id="res-premium" class="text-5xl font-black tracking-tight drop-shadow-lg mb-1">Rp 0</h2>
-                        <p class="text-white/80 text-sm font-medium">Professional Price (Safe + Profit)</p>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] mb-4 opacity-80">Final Quotation Result</p>
+                        <h2 id="res-premium" class="text-6xl font-black tracking-tighter drop-shadow-xl mb-2">Rp 0</h2>
+                        <p class="text-white/90 text-sm font-medium">Ini adalah harga rekomendasi "aman" untuk bisnis berkelanjutan.</p>
                     </div>
 
-                    <div class="space-y-4 relative z-10 mt-auto">
-                        <div class="bg-black/20 backdrop-blur-md p-5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between items-end mb-2">
+                    <div class="space-y-4 relative z-10 mt-10">
+                        <div class="bg-black/20 backdrop-blur-xl p-6 rounded-3xl border border-white/10">
+                            <div class="flex justify-between items-end mb-3">
                                 <span class="text-[10px] font-bold text-white/70 uppercase tracking-widest">Base Cost (Batas Boncos)</span>
-                                <span id="res-base-cost" class="font-bold text-lg text-white/90">Rp 0</span>
+                                <span id="res-base-cost" class="font-black text-xl text-white">Rp 0</span>
                             </div>
-                            <div class="w-full bg-black/30 h-1.5 rounded-full overflow-hidden mb-4">
-                                <div class="bg-white h-full w-[100%] opacity-30 rounded-full"></div>
+                            <div class="w-full bg-black/30 h-2 rounded-full overflow-hidden mb-6">
+                                <div class="bg-white/40 h-full w-[100%] rounded-full"></div>
                             </div>
                             <div class="flex justify-between items-end">
-                                <span class="text-[10px] font-bold text-white/70 uppercase tracking-widest">Safe Price (Min)</span>
-                                <span id="res-aman" class="font-bold text-xl text-white">Rp 0</span>
+                                <span class="text-[10px] font-bold text-white/70 uppercase tracking-widest">Safe Minimum Price</span>
+                                <span id="res-aman" class="font-black text-2xl text-white">Rp 0</span>
                             </div>
                         </div>
 
-                        <div class="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex justify-between items-center">
+                        <div class="bg-black/20 backdrop-blur-xl p-5 rounded-3xl border border-white/10 flex justify-between items-center">
                              <div>
-                                <p class="text-[10px] font-bold text-gold-200 uppercase mb-1">Labor Cost (Gaji Lo)</p>
-                                <p id="res-labor-cost" class="text-lg font-bold">Rp 0</p>
+                                <p class="text-[10px] font-bold text-gold-100 uppercase mb-1">Labor / Take Home Pay</p>
+                                <p id="res-labor-cost" class="text-xl font-black">Rp 0</p>
                              </div>
-                             <div class="h-8 w-[1px] bg-white/10"></div>
                              <div class="text-right">
-                                <p class="text-[10px] font-bold text-gold-200 uppercase mb-1">Net Margin</p>
-                                <p id="res-margin" class="text-lg font-bold text-white">20%</p>
+                                <p class="text-[10px] font-bold text-gold-100 uppercase mb-1">Net Margin</p>
+                                <p id="res-margin" class="text-xl font-black text-white">20%</p>
                              </div>
                         </div>
 
-                        <div class="flex gap-2 mt-4">
-                            <button onclick="copySummary()" class="flex-1 py-4 bg-black/30 hover:bg-black/50 text-white/80 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2 border border-white/5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="copySummary()" class="flex-1 py-5 bg-black/40 hover:bg-black/60 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 border border-white/10">
                                 Copy Text
                             </button>
-                            
-                            <button onclick="toggleQuoteModal()" class="flex-1 py-4 bg-white text-orange-950 hover:bg-orange-50 rounded-xl font-black text-xs uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2 shadow-orange-900/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            <button onclick="toggleQuoteModal()" class="flex-1 py-5 bg-white text-orange-900 hover:bg-stone-100 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl">
                                 View Quote
                             </button>
                         </div>
                     </div>
                 </div>
-                
-                <p class="text-[10px] text-center text-stone-600 font-medium mt-6">© 2026 GoldenHour App. All rights reserved.</p>
             </div>
         </div>
     </div>
 
     <div id="gear-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#1c1917] border border-white/10 w-full max-w-md p-6 rounded-3xl shadow-2xl relative">
-            <button onclick="toggleModal()" class="absolute top-4 right-4 text-stone-500 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <div class="mb-6">
-                <h3 class="text-xl font-bold text-white mb-1">Gear Cost Calculator</h3>
-                <p class="text-xs text-stone-400">Hitung biaya sewa alat ke diri sendiri (Depresiasi).</p>
-            </div>
-            <div class="space-y-4">
+        <div class="bg-white dark:bg-[#1c1917] border border-slate-200 dark:border-white/10 w-full max-w-md p-8 rounded-[2.5rem] shadow-2xl relative">
+            <button onclick="toggleModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 dark:hover:text-white">✕</button>
+            <h3 class="text-2xl font-black text-slate-900 dark:text-white mb-2">Gear Value</h3>
+            <p class="text-xs text-slate-500 mb-8">Hitung biaya sewa alat ke diri sendiri (depresiasi aset).</p>
+            <div class="space-y-6">
                 <div>
-                    <label class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 block">Total Nilai Aset (Yang dibawa)</label>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Total Nilai Alat (Yang dibawa)</label>
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 font-bold">Rp</span>
-                        <input type="number" id="total-asset-value" placeholder="Contoh: 50000000" class="w-full bg-black border border-white/10 rounded-xl p-4 pl-10 text-white font-mono text-lg focus:border-gold-500 outline-none">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-black">Rp</span>
+                        <input type="number" id="total-asset-value" placeholder="Contoh: 50000000" class="w-full bg-slate-100 dark:bg-black border border-slate-200 dark:border-white/10 rounded-2xl p-5 pl-12 text-slate-900 dark:text-white font-mono text-xl outline-none focus:border-gold-500">
                     </div>
-                    <p class="text-[10px] text-stone-500 italic mt-2">*Masukkan estimasi harga beli alat (Body, Lensa, Laptop, dll) yang dipakai hari ini.</p>
                 </div>
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="calculateDepreciation(0.015)" class="p-4 rounded-xl bg-white/5 hover:bg-gold-500/20 border border-white/10 hover:border-gold-500 transition group text-left">
-                        <span class="block text-xl font-bold text-white group-hover:text-gold-500">1.5%</span>
-                        <span class="text-[10px] text-stone-400 uppercase tracking-wider">Teman / Self</span>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="calculateDepreciation(0.015)" class="p-5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-transparent hover:border-gold-500 transition-all text-left">
+                        <span class="block text-2xl font-black text-slate-900 dark:text-white">1.5%</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold">Standard Rate</span>
                     </button>
-                    <button onclick="calculateDepreciation(0.03)" class="p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition text-left">
-                        <span class="block text-xl font-bold text-white">3.0%</span>
-                        <span class="text-[10px] text-stone-400 uppercase tracking-wider">Rental Rate</span>
+                    <button onclick="calculateDepreciation(0.03)" class="p-5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-transparent hover:border-gold-500 transition-all text-left">
+                        <span class="block text-2xl font-black text-slate-900 dark:text-white">3.0%</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold">Rental Rate</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="quote-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto">
-        <div class="w-full max-w-lg bg-[#0c0a09] border border-white/10 rounded-[2rem] shadow-2xl relative overflow-hidden">
-            <button onclick="toggleQuoteModal()" class="absolute top-4 right-4 z-20 p-2 bg-black/50 rounded-full text-white hover:bg-white hover:text-black transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-
-            <div class="p-8 md:p-10 relative">
-                <div class="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-64 w-64 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                </div>
-
-                <div class="flex justify-between items-start mb-10 relative z-10">
+    <div id="quote-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
+        <div class="w-full max-w-lg bg-white dark:bg-[#0c0a09] border border-slate-200 dark:border-white/10 rounded-[3rem] shadow-2xl relative overflow-hidden">
+            <div class="p-10 text-slate-900 dark:text-white">
+                <div class="flex justify-between items-start mb-12">
                     <div>
-                        <p class="text-[10px] font-bold text-gold-500 uppercase tracking-[0.2em] mb-1">Official Quotation</p>
-                        <h2 class="text-3xl font-black text-white tracking-tighter">GoldenHour<span class="text-gold-500">.</span></h2>
+                        <p class="text-[10px] font-black text-gold-600 uppercase tracking-[0.3em] mb-2">Quotation No. GH-026</p>
+                        <h2 class="text-4xl font-black tracking-tighter">GoldenHour<span class="text-gold-500">.</span></h2>
                     </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-1">Date</p>
-                        <p id="quote-date" class="text-xs font-mono text-white">...</p>
-                    </div>
+                    <p id="quote-date" class="text-xs font-mono text-slate-400">00/00/00</p>
                 </div>
-
-                <div class="mb-8 relative z-10">
-                    <p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2">Project For</p>
-                    <h3 id="quote-client" class="text-xl font-bold text-white border-b border-white/10 pb-4">Client Name</h3>
+                <div class="mb-10">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Prepared For</p>
+                    <h3 id="quote-client" class="text-2xl font-black border-b border-slate-100 dark:border-white/10 pb-6">Client Name</h3>
                 </div>
-
-                <div class="space-y-4 mb-10 relative z-10">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-stone-400">Creative Service (Labor)</span>
-                        <span id="quote-labor" class="font-bold text-white font-mono">Rp 0</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-stone-400">Production Expenses</span>
-                        <span id="quote-direct" class="font-bold text-white font-mono">Rp 0</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-stone-400">Equipment & Licensing</span>
-                        <span id="quote-overhead" class="font-bold text-white font-mono">Rp 0</span>
-                    </div>
+                <div class="space-y-5 mb-12 text-sm">
+                    <div class="flex justify-between items-center"><span class="text-slate-500 uppercase text-[10px] font-black">Labor & Skills</span><span id="quote-labor" class="font-black font-mono"></span></div>
+                    <div class="flex justify-between items-center"><span class="text-slate-500 uppercase text-[10px] font-black">Operational Expenses</span><span id="quote-direct" class="font-black font-mono"></span></div>
+                    <div class="flex justify-between items-center"><span class="text-slate-500 uppercase text-[10px] font-black">Depreciation & Licensing</span><span id="quote-overhead" class="font-black font-mono"></span></div>
                 </div>
-
-                <div class="bg-white/5 p-6 rounded-2xl border border-white/5 relative z-10">
-                    <div class="flex justify-between items-end mb-2">
-                        <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Total Investment</span>
-                        <span id="quote-total" class="text-3xl font-black text-gold-500 tracking-tight">Rp 0</span>
-                    </div>
-                    <p class="text-[10px] text-stone-500 italic text-right">Valid for 14 days from issuance.</p>
-                </div>
-
-                <div class="mt-8 text-center relative z-10">
-                     <p class="text-[10px] text-stone-700 font-medium">Generated by GoldenHour System</p>
+                <div class="bg-gold-500/10 p-8 rounded-3xl border border-gold-500/20 text-right">
+                    <span class="text-[10px] font-black text-gold-600 uppercase block mb-2 tracking-widest">Total Creative Investment</span>
+                    <span id="quote-total" class="text-4xl font-black text-gold-600 dark:text-gold-500 tracking-tighter"></span>
                 </div>
             </div>
-            
-            <div class="bg-black p-4 flex gap-2 border-t border-white/10">
-                 <button onclick="toggleQuoteModal()" class="flex-1 py-3 rounded-xl text-xs font-bold text-stone-400 hover:text-white hover:bg-white/10 transition">Close</button>
-                 <button class="flex-1 py-3 rounded-xl text-xs font-bold bg-white text-black hover:bg-stone-200 transition" onclick="alert('Silakan Screenshot tampilan ini untuk disimpan sebagai gambar!')">Screenshot to Save</button>
+            <div class="bg-slate-50 dark:bg-black p-6 flex gap-3">
+                 <button onclick="toggleQuoteModal()" class="flex-1 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Close</button>
+                 <button onclick="window.print()" class="flex-1 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">Print Quote</button>
             </div>
         </div>
     </div>
 
     <script>
+        // App State
         const dataProfesi = {
             "Fotografer": { b1: "Brief & Konsep", v1: 1, b2: "Shooting Day", v2: 4, b3: "Editing/Retouch", v3: 3, b4: "Delivery/Admin", v4: 1 },
             "Videografer": { b1: "Pre-Production", v1: 2, b2: "Shooting Day", v2: 5, b3: "Editing & Color", v3: 6, b4: "Revisi & Render", v4: 2 }
         };
-        
-        // --- AUTH CONFIG ---
-        // Password Asli: r4t3c4rd
-        // Ini versi Base64 biar ga kebaca langsung (cjR0M2M0cmQ=)
         const SECRET_HASH = "cjR0M2M0cmQ="; 
-        
+        let directCostItems = [ { name: "Transport & Parking", value: 100000 }, { name: "Crew Meals", value: 50000 } ];
+        let profesiAktif = "Fotografer";
+
+        // Theme & Meta Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const meta = document.getElementById('theme-meta');
+            const isDark = html.classList.toggle('dark');
+            
+            localStorage.setItem('golden_theme', isDark ? 'dark' : 'light');
+            meta.setAttribute('content', isDark ? '#0c0a09' : '#f8fafc');
+            updateThemeIcons();
+        }
+
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const sunPath = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`;
+            const moonPath = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`;
+            
+            const iconM = document.getElementById('theme-icon-m');
+            const iconD = document.getElementById('theme-icon-d');
+            
+            if (iconM) iconM.innerHTML = isDark ? sunPath : moonPath;
+            if (iconD) iconD.innerHTML = isDark ? sunPath : moonPath;
+        }
+
+        // Auth
         function checkLogin(e) {
             e.preventDefault();
             const input = document.getElementById('password-input').value;
-            const errMsg = document.getElementById('error-msg');
-            
-            // Kita encode input user, lalu bandingkan dengan hash rahasia
             if (btoa(input) === SECRET_HASH) {
                 localStorage.setItem('golden_access', 'true');
                 unlockApp();
             } else {
-                errMsg.classList.remove('hidden');
-                document.getElementById('password-input').classList.add('border-red-500');
+                document.getElementById('error-msg').classList.remove('hidden');
             }
         }
-        
         function unlockApp() {
             document.getElementById('login-overlay').classList.add('hidden-overlay');
             const mainApp = document.getElementById('main-app');
             mainApp.classList.remove('blur-sm', 'opacity-50', 'pointer-events-none');
         }
-        
-        // Check local storage on load
-        window.onload = function() {
-            if (localStorage.getItem('golden_access') === 'true') {
-                unlockApp();
-            }
-        }
 
-        let directCostItems = [ { name: "Transport", value: 100000 }, { name: "Konsumsi", value: 50000 } ];
-        let profesiAktif = "Fotografer";
-
-        // --- MODAL LOGIC ---
-        function toggleModal() { document.getElementById('gear-modal').classList.toggle('hidden'); }
-        
-        function toggleQuoteModal() {
-            const modal = document.getElementById('quote-modal');
-            
-            if (modal.classList.contains('hidden')) {
-                // Populate Data
-                const clientName = document.getElementById('project-name').value || "Valued Client";
-                const date = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-                
-                document.getElementById('quote-client').innerText = clientName;
-                document.getElementById('quote-date').innerText = date;
-                
-                document.getElementById('quote-labor').innerText = document.getElementById('res-labor-cost').innerText;
-                document.getElementById('quote-direct').innerText = document.getElementById('total-direct-display').innerText;
-                
-                // Gap logic for quote
-                const laborVal = parseRupiah(document.getElementById('res-labor-cost').innerText);
-                const directVal = parseRupiah(document.getElementById('total-direct-display').innerText);
-                const premiumVal = parseRupiah(document.getElementById('res-premium').innerText);
-                const gapVal = premiumVal - laborVal - directVal;
-                
-                document.getElementById('quote-overhead').innerText = formatRupiah(gapVal);
-                document.getElementById('quote-total').innerText = document.getElementById('res-premium').innerText;
-                
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-        
-        function parseRupiah(str) {
-            return parseInt(str.replace(/[^0-9]/g, '')) || 0;
-        }
-
-        function calculateDepreciation(percentage) {
-            const assetValue = parseFloat(document.getElementById('total-asset-value').value) || 0;
-            if(assetValue === 0) { alert("Isi total nilai alat dulu bro!"); return; }
-            const depreciation = assetValue * percentage;
-            document.getElementById('overhead-cost').value = depreciation.toFixed(0);
-            calculate(); toggleModal();
-        }
-
-        // --- DIRECT COST LOGIC ---
-        function renderDirectCosts() {
-            const list = document.getElementById('direct-cost-list');
-            list.innerHTML = '';
-            let totalDirect = 0;
-            directCostItems.forEach((item, index) => {
-                totalDirect += item.value;
-                const row = document.createElement('div');
-                row.className = "flex gap-2 items-center group";
-                row.innerHTML = `
-                    <input type="text" value="${item.name}" onchange="updateDirectItem(${index}, 'name', this.value)" class="input-glass w-full p-2 rounded-lg text-xs font-semibold outline-none flex-1 placeholder-stone-600">
-                    <div class="relative w-24">
-                        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-stone-500">Rp</span>
-                        <input type="number" value="${item.value}" onchange="updateDirectItem(${index}, 'value', this.value)" class="input-glass w-full pl-6 p-2 rounded-lg text-xs font-mono font-bold outline-none text-right">
-                    </div>
-                    <button onclick="removeDirectItem(${index})" class="text-stone-600 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                `;
-                list.appendChild(row);
-            });
-            document.getElementById('total-direct-display').innerText = formatRupiah(totalDirect);
-            calculate();
-        }
-        function addDirectCostItem() { directCostItems.push({ name: "", value: 0 }); renderDirectCosts(); }
-        function removeDirectItem(index) { directCostItems.splice(index, 1); renderDirectCosts(); }
-        function updateDirectItem(index, field, val) { 
-            if (field === 'value') val = parseFloat(val) || 0; 
-            directCostItems[index][field] = val; 
-            if (field === 'value') renderDirectCosts(); 
-        }
-
-        // --- MAIN LOGIC ---
-        function renderInputs() {
-            const container = document.getElementById('input-jam-container');
-            const p = dataProfesi[profesiAktif];
-            container.innerHTML = `<div class="grid grid-cols-2 gap-4 md:gap-6">${[1,2,3,4].map(i => `<div class="space-y-2"><label class="text-[10px] font-bold text-stone-500 uppercase tracking-widest">${p['b'+i]}</label><div class="relative"><input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-3 md:p-4 rounded-xl text-lg md:text-xl font-bold calc-trigger outline-none text-center font-mono"><span class="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-[10px] text-stone-600 font-bold uppercase">Jam</span></div></div>`).join('')}</div>`;
-            document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
-            calculate();
-        }
-        function renderButtons() {
-            const container = document.getElementById('profesi-container');
-            container.innerHTML = Object.keys(dataProfesi).map(prof => `<button onclick="setProfesi('${prof}')" class="btn-profesi px-6 py-2.5 rounded-full text-[11px] font-bold text-stone-400 uppercase tracking-wider ${prof === profesiAktif ? 'active' : ''}">${prof}</button>`).join('');
-        }
-        function setProfesi(prof) { profesiAktif = prof; renderButtons(); renderInputs(); }
-        function setRate(val) { document.getElementById('rate-jam').value = val; calculate(); }
+        // Calculator Logic
         function formatRupiah(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
+        function parseRupiah(str) { return parseInt(str.replace(/[^0-9]/g, '')) || 0; }
 
         function calculate() {
             const j = [1,2,3,4].map(i => parseFloat(document.getElementById('jam-'+i).value) || 0);
@@ -485,35 +376,93 @@
             document.getElementById('res-aman').innerText = formatRupiah(safePrice);
             document.getElementById('res-premium').innerText = formatRupiah(premiumPrice);
 
-            // Profit Check
             const profitBox = document.getElementById('profit-box');
             if (targetPrice > 0) {
                 profitBox.classList.remove('hidden');
-                profitBox.classList.add('profit-reveal');
                 const realProfit = targetPrice - baseCost;
                 const margin = ((realProfit / targetPrice) * 100).toFixed(1);
                 document.getElementById('real-profit').innerText = formatRupiah(realProfit);
                 document.getElementById('margin-percent').innerText = margin + "% Margin";
-                if (realProfit > 0) {
-                    profitBox.className = "profit-reveal rounded-xl border p-4 bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                    document.getElementById('profit-desc').innerText = "Safe! You are profitable.";
-                } else {
-                    profitBox.className = "profit-reveal rounded-xl border p-4 bg-red-500/10 border-red-500/30 text-red-400";
-                    document.getElementById('profit-desc').innerText = "Warning: Price below Base Cost!";
-                }
+                
+                const isSafe = realProfit > 0;
+                profitBox.className = `rounded-2xl border p-5 ${isSafe ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400'}`;
+                document.getElementById('profit-desc').innerText = isSafe ? "Harga ini menguntungkan!" : "Bahaya: Di bawah harga pokok!";
             } else { profitBox.classList.add('hidden'); }
         }
 
-        function copySummary() {
-            const projectName = document.getElementById('project-name').value || "Project";
-            const directItemsText = directCostItems.map(i => `- ${i.name}: ${formatRupiah(i.value)}`).join('\n');
-            const sum = `🌅 *GOLDEN HOUR QUOTATION*\nProject: ${projectName}\n\nInvestasi Visual:\n⭐ *GOLDEN PRICE: ${document.getElementById('res-premium').innerText}*\n✅ *Safe Price: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown:_\n- Labor: ${document.getElementById('res-labor-cost').innerText}\n- Base Cost: ${document.getElementById('res-base-cost').innerText}\n- Direct Cost: ${document.getElementById('total-direct-display').innerText}\n\n*Generated by GoldenHour App*`;
-            navigator.clipboard.writeText(sum);
-            alert("Quotation copied to clipboard!");
+        // Direct Cost UI
+        function renderDirectCosts() {
+            const list = document.getElementById('direct-cost-list');
+            list.innerHTML = '';
+            directCostItems.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "flex gap-2 items-center group";
+                row.innerHTML = `
+                    <input type="text" value="${item.name}" onchange="updateDirectItem(${index}, 'name', this.value)" class="input-glass w-full p-3 rounded-xl text-xs font-semibold flex-1">
+                    <input type="number" value="${item.value}" onchange="updateDirectItem(${index}, 'value', this.value)" class="input-glass w-28 p-3 rounded-xl text-xs font-mono font-bold text-right">
+                    <button onclick="removeDirectItem(${index})" class="text-slate-300 hover:text-red-500 transition px-2">✕</button>
+                `;
+                list.appendChild(row);
+            });
+            document.getElementById('total-direct-display').innerText = formatRupiah(directCostItems.reduce((a, b) => a + b.value, 0));
+            calculate();
+        }
+        function addDirectCostItem() { directCostItems.push({ name: "Biaya Baru", value: 0 }); renderDirectCosts(); }
+        function removeDirectItem(index) { directCostItems.splice(index, 1); renderDirectCosts(); }
+        function updateDirectItem(index, field, val) { directCostItems[index][field] = field === 'value' ? (parseFloat(val) || 0) : val; renderDirectCosts(); }
+
+        // Core Functions
+        function setProfesi(prof) { profesiAktif = prof; renderButtons(); renderInputs(); }
+        function setRate(val) { document.getElementById('rate-jam').value = val; calculate(); }
+        function toggleModal() { document.getElementById('gear-modal').classList.toggle('hidden'); }
+        function calculateDepreciation(p) {
+            const v = parseFloat(document.getElementById('total-asset-value').value) || 0;
+            document.getElementById('overhead-cost').value = Math.round(v * p);
+            calculate(); toggleModal();
         }
 
-        renderButtons(); renderInputs(); renderDirectCosts();
-        document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
+        function renderInputs() {
+            const p = dataProfesi[profesiAktif];
+            document.getElementById('input-jam-container').innerHTML = `<div class="grid grid-cols-2 gap-4">${[1,2,3,4].map(i => `<div class="space-y-2"><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">${p['b'+i]}</label><div class="relative"><input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-4 rounded-xl text-2xl font-black calc-trigger text-center font-mono"></div></div>`).join('')}</div>`;
+            document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
+            calculate();
+        }
+
+        function renderButtons() {
+            document.getElementById('profesi-container').innerHTML = Object.keys(dataProfesi).map(prof => `<button onclick="setProfesi('${prof}')" class="btn-profesi px-5 py-2.5 rounded-xl text-[10px] font-black text-slate-500 dark:text-stone-500 uppercase tracking-widest border border-slate-200 dark:border-white/5 ${prof === profesiAktif ? 'active' : ''}">${prof}</button>`).join('');
+        }
+
+        function toggleQuoteModal() {
+            const modal = document.getElementById('quote-modal');
+            if (modal.classList.contains('hidden')) {
+                document.getElementById('quote-client').innerText = document.getElementById('project-name').value || "Valued Client";
+                document.getElementById('quote-date').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                document.getElementById('quote-labor').innerText = document.getElementById('res-labor-cost').innerText;
+                document.getElementById('quote-direct').innerText = document.getElementById('total-direct-display').innerText;
+                const total = parseRupiah(document.getElementById('res-premium').innerText);
+                document.getElementById('quote-overhead').innerText = formatRupiah(total - parseRupiah(document.getElementById('res-labor-cost').innerText) - parseRupiah(document.getElementById('total-direct-display').innerText));
+                document.getElementById('quote-total').innerText = document.getElementById('res-premium').innerText;
+                modal.classList.remove('hidden');
+            } else modal.classList.add('hidden');
+        }
+
+        function copySummary() {
+            const name = document.getElementById('project-name').value || "Visual Project";
+            const sum = `🌅 *GOLDEN HOUR QUOTATION*\nProject: ${name}\n\nInvestasi Visual:\n⭐ *GOLDEN PRICE: ${document.getElementById('res-premium').innerText}*\n✅ *Safe Minimum: ${document.getElementById('res-aman').innerText}*\n\n_Breakdown:_\n- Labor Cost: ${document.getElementById('res-labor-cost').innerText}\n- Production: ${document.getElementById('total-direct-display').innerText}\n\n*Hitung otomatis di GoldenHour App*`;
+            navigator.clipboard.writeText(sum);
+            alert("Quotation disalin ke clipboard!");
+        }
+
+        // Initialize
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('golden_theme') || 'dark';
+            if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+            
+            updateThemeIcons();
+            if (localStorage.getItem('golden_access') === 'true') unlockApp();
+            renderButtons(); renderInputs(); renderDirectCosts();
+        }
     </script>
 </body>
 </html>
