@@ -1,245 +1,86 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Hour - Visual Rate Calculator</title>
+    
+    <title>GoldenHour - Visual Pricing System</title>
+    <meta name="title" content="GoldenHour - Visual Pricing System">
+    <meta name="description" content="Professional Pricing Calculator for Visual Creators & Freelancers.">
+    <meta name="theme-color" content="#0c0a09" id="theme-meta">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GoldenHour - Visual Pricing System">
+    <meta property="og:description" content="Hitung rate jasa visualmu dengan sistem batas boncos dan golden price.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' },
+                        dark: { 800: '#1c1917', 900: '#0c0a09' }
+                    },
+                    borderRadius: { '3xl': '1.5rem', '4xl': '2rem' }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --gold: #D4AF37;
-            --dark: #1a1a1a;
-            --grey: #2d2d2d;
-            --text: #f0f0f0;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--dark);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: var(--grey);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        h1, h2, h3 { color: var(--gold); margin-top: 0; }
-        h1 { text-align: center; font-weight: 800; letter-spacing: -1px; }
-        .subtitle { text-align: center; opacity: 0.7; font-size: 0.9em; margin-bottom: 30px; }
-
-        .section { margin-bottom: 25px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        label { display: block; margin-bottom: 8px; font-size: 0.9em; font-weight: 500; }
+        /* Smooth Transition for all color changes */
+        * { transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease; }
         
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: white;
-            font-size: 1em;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
-
-        input:focus { outline: none; border-color: var(--gold); }
-
-        .hint { font-size: 0.75em; color: #888; margin-top: -5px; margin-bottom: 15px; display: block; }
-
-        .result-box {
-            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%);
-            color: #000;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .total-price { font-size: 2.5em; font-weight: 800; margin: 10px 0; }
+        body { min-height: 100vh; }
         
-        button {
-            cursor: pointer;
-            border: none;
-            font-weight: 700;
-            transition: transform 0.1s;
-        }
-        button:active { transform: scale(0.98); }
+        /* Background Logic */
+        .dark body { background: radial-gradient(circle at top left, #1a1614, #000000); }
+        html:not(.dark) body { background: radial-gradient(circle at top left, #f8fafc, #f1f5f9); }
 
-        .btn-copy {
-            background: #000;
-            color: var(--gold);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.9em;
-            margin-top: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* Card Adaptation */
+        .card-glass { backdrop-filter: blur(16px); }
+        .dark .card-glass { background: rgba(28, 25, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); }
+        html:not(.dark) .card-glass { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 40px -15px rgba(0,0,0,0.08); }
 
-        /* SUPPORT SECTION STYLES */
-        .support-section {
-            margin-top: 30px;
-            text-align: center;
-            padding: 20px;
-            border-top: 1px dashed #444;
-        }
+        /* Input Adaptation */
+        .input-glass { outline: none !important; }
+        .dark .input-glass { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
+        html:not(.dark) .input-glass { background: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; color: #0f172a !important; }
+        .input-glass:focus { border-color: #f59e0b !important; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
 
-        .btn-support {
-            display: inline-block;
-            background-color: #fff;
-            color: #000;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
-        }
-        .btn-support:hover { background-color: #f0f0f0; }
-
-        .disclaimer { font-size: 0.8em; color: #666; text-align: center; margin-top: 40px; }
-
-        /* Floating Button for Mobile */
-        .floating-support {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--gold);
-            color: black;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            text-decoration: none;
-            font-size: 24px;
-            z-index: 100;
-        }
+        /* Active Button Logic */
+        .btn-profesi.active { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: black !important; font-weight: 800; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
+        
+        #login-overlay { transition: opacity 0.5s ease-out, visibility 0.5s; }
+        .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
 </head>
-<body>
 
-<div class="container">
-    <h1>Golden Hour</h1>
-    <div class="subtitle">Rate Card Calculator for Visual Creators</div>
+<body class="p-4 md:p-8 text-slate-800 dark:text-stone-200 flex flex-col justify-center overflow-x-hidden">
 
-    <div class="section">
-        <h3>1. Jasa & Kreatif</h3>
-        <label>Target Fee Harian Lo (Net)</label>
-        <input type="number" id="fee" placeholder="Misal: 1500000" oninput="calculate()">
-        <span class="hint">Berapa angka bersih yang mau lo bawa pulang?</span>
-    </div>
-
-    <div class="section">
-        <h3>2. Biaya Sewa Alat Sendiri (Depresiasi)</h3>
-        <label>Total Harga Beli Gear (Kamera, Lensa, Laptop, dll)</label>
-        <input type="number" id="gearPrice" placeholder="Misal: 30000000" oninput="calculate()">
-        
-        <label>Estimasi Umur Pakai (Tahun)</label>
-        <input type="number" id="gearLife" value="3" oninput="calculate()">
-        
-        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-top: 10px;">
-            <small>Biaya sewa ke diri sendiri per hari:</small>
-            <div id="depreciationResult" style="color: var(--gold); font-weight: bold;">Rp 0</div>
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        <div class="w-full max-w-md bg-[#1c1917] border border-white/10 p-8 rounded-3xl shadow-2xl relative z-10 text-center">
+            <div class="w-16 h-16 bg-gold-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-gold-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            </div>
+            <h2 class="text-2xl font-black text-white mb-2">GoldenHour Access</h2>
+            <p class="text-stone-500 text-sm mb-8">Masukkan kode akses untuk membuka sistem.</p>
+            <form onsubmit="checkLogin(event)" class="space-y-4">
+                <input type="password" id="password-input" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-center text-white outline-none focus:border-gold-500 transition tracking-[0.5em] text-lg">
+                <button type="submit" class="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gold-500 transition uppercase tracking-widest text-xs">Unlock System</button>
+            </form>
+            <p id="error-msg" class="text-red-500 text-xs mt-4 hidden font-bold italic">Access Denied. Wrong Code.</p>
         </div>
     </div>
 
-    <div class="section">
-        <h3>3. Operasional</h3>
-        <label>Transport, Makan, Crew, Software Subs</label>
-        <input type="number" id="ops" placeholder="Misal: 500000" oninput="calculate()">
-    </div>
-
-    <div class="result-box">
-        <small style="text-transform: uppercase; letter-spacing: 1px;">Saran Harga ke Klien</small>
-        <div class="total-price" id="total">Rp 0</div>
-        <button class="btn-copy" onclick="copyText()">
-            📋 Copy Rincian buat Klien
-        </button>
-    </div>
-
-    <div class="support-section">
-        <h3>☕ Pay as You Like</h3>
-        <p style="font-size: 0.95em; color: #ccc;">
-            Jujur, tadinya app ini mau gw jual. Tapi gw sadar mending gw share biar kita maju bareng.<br><br>
-            App ini <strong>GRATIS</strong> selamanya. Tapi kalau angka di atas ngebantu lo dapet project (atau sekadar bikin lo pede ngasih harga), lo bisa traktir gw kopi buat biaya server.
-        </p>
+    <div id="main-app" class="max-w-6xl w-full mx-auto relative z-10 blur-sm opacity-50 pointer-events-none">
         
-        <a href="https://sociabuzz.com/ecpcorp" target="_blank" class="btn-support">
-            Traktir Gw Kopi via SocioBuzz ➔
-        </a>
-        
-        <p style="font-size: 0.8em; color: #888; margin-top: 15px;">
-            *Belum ada budget? Pake aja gapapa, doain project gw juga lancar ya!
-        </p>
-    </div>
-
-    <div class="disclaimer">
-        Built with ☕ & Anxiety by Enzo. &copy; 2026 Golden Hour.
-    </div>
-</div>
-
-<a href="https://sociabuzz.com/ecpcorp" target="_blank" class="floating-support" title="Support Dev">☕</a>
-
-<script>
-    function formatRupiah(angka) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
-    }
-
-    function calculate() {
-        // Ambil Value
-        let fee = parseFloat(document.getElementById('fee').value) || 0;
-        let ops = parseFloat(document.getElementById('ops').value) || 0;
-        
-        // Hitung Depresiasi
-        let gearPrice = parseFloat(document.getElementById('gearPrice').value) || 0;
-        let gearLife = parseFloat(document.getElementById('gearLife').value) || 3;
-        
-        let depCost = 0;
-        if(gearPrice > 0) {
-            // Rumus: 0.5% dari harga alat per hari pemakaian (Industry Standard Rental Rate untuk Own Gear)
-            depCost = gearPrice * 0.005; 
-        }
-
-        document.getElementById('depreciationResult').innerText = formatRupiah(depCost);
-
-        // Total
-        let total = fee + ops + depCost;
-        document.getElementById('total').innerText = formatRupiah(total);
-        
-        return { fee, ops, depCost, total };
-    }
-
-    function copyText() {
-        let data = calculate();
-        if(data.total === 0) {
-            alert("Isi dulu datanya bro!");
-            return;
-        }
-
-        let text = `Halo, berikut estimasi rate card untuk project ini berdasarkan scope visual yang dibutuhkan:\n\n` +
-                   `• Creative Service: ${formatRupiah(data.fee)}\n` +
-                   `• Equipment Cost: ${formatRupiah(data.depCost)}\n` +
-                   `• Production Ops: ${formatRupiah(data.ops)}\n` +
-                   `----------------------------------\n` +
-                   `TOTAL INVESTASI: ${formatRupiah(data.total)}\n\n` +
-                   `*Generated by Golden Hour*`;
-
-        navigator.clipboard.writeText(text).then(() => {
-            alert("Rincian berhasil dicopy! Tinggal paste ke WA/Email klien.");
-        });
-    }
-</script>
-
-</body>
-</html>
+        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-6">
+            <div class="flex justify-between items-center w-full md:w-auto">
+                <div>
+                    <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-
