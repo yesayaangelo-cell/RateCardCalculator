@@ -24,7 +24,7 @@
         
         .card-glass { backdrop-filter: blur(12px); }
         .dark .card-glass { background: rgba(28, 25, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); }
-        html:not(.dark) .card-glass { background: white; border: 1px solid rgba(0, 0, 0, 0.05); shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
+        html:not(.dark) .card-glass { background: white; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
 
         .input-glass { outline: none; }
         .dark .input-glass { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; }
@@ -50,7 +50,7 @@
         <header class="mb-10 flex flex-col md:flex-row justify-between items-end border-b border-stone-200 dark:border-white/10 pb-8">
             <div>
                 <h1 class="text-4xl font-black tracking-tighter italic">GoldenHour<span class="text-gold-500">.</span></h1>
-                <p class="text-stone-500 text-xs italic italic">"Pricing Calculator for Visual Creators"</p>
+                <p class="text-stone-500 text-xs italic">"Pricing Calculator for Visual Creators"</p>
             </div>
             <div class="flex items-center gap-4 mt-4 md:mt-0">
                 <div id="profesi-container" class="flex gap-2"></div>
@@ -104,7 +104,7 @@
                                 <span class="w-1.5 h-1.5 bg-white rounded-full"></span> Golden Price
                             </p>
                             <h2 id="res-premium" class="text-5xl font-black tracking-tighter mb-1">Rp 0</h2>
-                            <p class="text-[10px] font-medium opacity-80 mb-8 uppercase tracking-tighter italic italic">Professional Price (Safe + Profit)</p>
+                            <p class="text-[10px] font-medium opacity-80 mb-8 uppercase tracking-tighter italic">Professional Price (Safe + Profit)</p>
                             
                             <div class="space-y-4 bg-black/20 p-6 rounded-3xl border border-white/10 backdrop-blur-md mb-8 shadow-inner">
                                 <div class="flex justify-between items-end border-b border-white/5 pb-4">
@@ -133,8 +133,8 @@
                                 <button onclick="window.print()" class="py-4 bg-white text-orange-900 hover:bg-stone-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition">View Quote</button>
                             </div>
 
-                            <a href="https://sociabuzz.com/ecpcorp" target="_blank" class="block w-full py-4 bg-black/30 hover:bg-black/50 border border-white/10 rounded-2xl text-center transition">
-                                <p class="text-[10px] font-black uppercase tracking-[0.2em]">☕ Support Dev? Traktir Kopi</p>
+                            <a href="https://sociabuzz.com/ecpcorp" target="_blank" class="block w-full py-4 bg-white hover:bg-stone-100 rounded-2xl text-center transition shadow-lg">
+                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-900">☕ Support Dev? Traktir Kopi</p>
                             </a>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
         </div>
     </div>
 
-    <a href="https://sociabuzz.com/ecpcorp" target="_blank" class="floating-coffee fixed bottom-6 right-6 md:hidden w-14 h-14 bg-gradient-to-br from-gold-400 to-orange-600 rounded-full shadow-2xl flex items-center justify-center text-2xl border-2 border-white/20 animate-bounce-slow z-50">
+    <a href="https://sociabuzz.com/ecpcorp" target="_blank" class="floating-coffee fixed bottom-6 right-6 md:hidden w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center text-2xl border-2 border-stone-100 animate-bounce-slow z-50">
         ☕
     </a>
 
@@ -162,7 +162,7 @@
             <div class="space-y-8">
                 <div>
                     <label class="text-[11px] font-black text-gold-500 uppercase block mb-3 tracking-[0.2em]">Total Asset Value (Rp)</label>
-                    <input type="number" id="total-asset-value" placeholder="50.000.000" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-white font-mono text-3xl outline-none focus:border-gold-500">
+                    <input type="number" id="total-asset-value" placeholder="50.000.000" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-white font-mono text-3xl outline-none focus:border-gold-500 shadow-2xl">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="calcGear(0.015)" class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition group">
@@ -199,7 +199,7 @@
         };
         let costs = [{ name: "Transport & Parking", value: 100000 }, { name: "Konsumsi / Meals", value: 50000 }];
         let activeProf = "Fotografer";
-        let history = JSON.parse(localStorage.getItem('gh_vfinal_coffee')) || [];
+        let history = JSON.parse(localStorage.getItem('gh_vfinal_white')) || [];
 
         function format(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
@@ -232,10 +232,10 @@
         }
 
         function saveToHistory() {
-            const data = { id: Date.now(), name: document.getElementById('project-name').value || "Untitled", price: document.getElementById('res-premium').innerText,
+            const data = { id: Date.now(), name: document.getElementById('project-name').value || "Untitled Project", price: document.getElementById('res-premium').innerText,
                 prof: activeProf, rate: document.getElementById('rate-jam').value, jams: [1,2,3,4].map(i => document.getElementById('jam-'+i).value), overhead: document.getElementById('overhead-cost').value, costs: JSON.parse(JSON.stringify(costs)) };
             history.unshift(data); if(history.length > 10) history.pop();
-            localStorage.setItem('gh_vfinal_coffee', JSON.stringify(history)); renderHistory();
+            localStorage.setItem('gh_vfinal_white', JSON.stringify(history)); renderHistory();
         }
 
         function loadHistory(id) {
@@ -264,7 +264,7 @@
         function renderInputs() {
             const p = PROFESI[activeProf];
             document.getElementById('input-jam-container').innerHTML = [1,2,3,4].map(i => `
-                <div class="space-y-1.5"><label class="text-[9px] font-black text-stone-500 uppercase tracking-widest italic italic italic">${p['b'+i]}</label>
+                <div class="space-y-1.5"><label class="text-[9px] font-black text-stone-500 uppercase tracking-widest italic italic italic italic">${p['b'+i]}</label>
                 <input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-4 rounded-xl text-2xl font-black text-center font-mono calc-trigger"></div>`).join('');
             document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate)); calculate();
         }
