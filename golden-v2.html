@@ -37,7 +37,6 @@
         #login-overlay { transition: opacity 0.5s ease-out, visibility 0.5s; }
         .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* PRINT LOGIC */
         @media print {
             #main-app, #login-overlay, #toast, #gear-modal, .sticky { display: none !important; }
             #pdf-template { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 40px !important; color: black !important; background: white !important; }
@@ -125,7 +124,7 @@
                         </div>
                     </div>
                     <div class="card-glass p-6 rounded-[2.5rem]">
-                        <h3 class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4 italic">Recent Projects</h3>
+                        <h3 class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4 italic italic">Recent Projects (Click to Load)</h3>
                         <div id="history-list" class="space-y-3"></div>
                     </div>
                 </div>
@@ -161,19 +160,15 @@
                 <h3 id="pdf-total" style="font-size: 28px; font-weight: 900; margin: 0;"></h3>
             </div>
         </div>
-        <div style="margin-top: 60px; border-top: 1px solid #eee; padding-top: 20px; font-size: 8px; color: #999; font-style: italic;">
-            * This is an official quotation. Prices are calculated based on creative labor and operational standards. Valid for 14 days.
-        </div>
     </div>
 
     <div id="gear-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
         <div class="bg-stone-900 border border-white/10 w-full max-w-md p-10 rounded-[3rem] shadow-2xl">
-            <h3 class="text-3xl font-black text-white mb-2 tracking-tighter italic">Gear Calculator</h3>
-            <p class="text-stone-500 text-xs mb-10 italic">Input total asset value to calculate depreciation.</p>
-            <div class="space-y-8">
+            <h3 class="text-3xl font-black text-white mb-2 tracking-tighter italic italic">Gear Calculator</h3>
+            <div class="space-y-8 mt-6">
                 <div>
                     <label class="text-[11px] font-black text-gold-500 uppercase block mb-3 tracking-[0.2em]">Total Asset Value (Rp)</label>
-                    <input type="number" id="total-asset-value" placeholder="Contoh: 50000000" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-white font-mono text-2xl outline-none focus:border-gold-500 shadow-inner">
+                    <input type="number" id="total-asset-value" placeholder="Contoh: 50000000" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-white font-mono text-2xl outline-none focus:border-gold-500">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="calcGear(0.015)" class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition group">
@@ -185,7 +180,7 @@
                         <span class="text-xs text-stone-500 font-bold uppercase tracking-widest">High Usage</span>
                     </button>
                 </div>
-                <button onclick="toggleModal()" class="w-full text-stone-600 text-[10px] font-black uppercase mt-4 tracking-[0.3em]">Cancel</button>
+                <button onclick="toggleModal()" class="w-full text-stone-600 text-[10px] font-black uppercase mt-4">Cancel</button>
             </div>
         </div>
     </div>
@@ -200,7 +195,7 @@
         const SECRET = "cjR0M2M0cmQ=";
         let costs = [ { name: "Transport & Parking", value: 100000 }, { name: "Crew Meals", value: 50000 } ];
         let activeProf = "Fotografer";
-        let history = JSON.parse(localStorage.getItem('gh_v5_history') || '[]');
+        let history = JSON.parse(localStorage.getItem('gh_vfinal_history') || '[]');
 
         function checkLogin(e) { e.preventDefault(); if (btoa(document.getElementById('password-input').value) === SECRET) { localStorage.setItem('gh_access', 'true'); unlock(); } }
         function unlock() { document.getElementById('login-overlay').classList.add('hidden-overlay'); document.getElementById('main-app').classList.remove('blur-sm', 'opacity-50', 'pointer-events-none'); }
@@ -225,42 +220,69 @@
             document.getElementById('pdf-client').innerText = document.getElementById('project-name').value || "CLIENT NAME";
             document.getElementById('pdf-total').innerText = format(premium);
             document.getElementById('pdf-items').innerHTML = `
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Creative Labor & Skills</td><td style="text-align: right; padding: 10px 0;">${format(labor)}</td></tr>
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Operational & Expenses</td><td style="text-align: right; padding: 10px 0;">${format(direct)}</td></tr>
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Depreciation & Professional Margin</td><td style="text-align: right; padding: 10px 0;">${format(premium - labor - direct)}</td></tr>
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Creative Labor</td><td style="text-align: right; padding: 10px 0;">${format(labor)}</td></tr>
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Operational Cost</td><td style="text-align: right; padding: 10px 0;">${format(direct)}</td></tr>
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Depreciation & Margin</td><td style="text-align: right; padding: 10px 0;">${format(premium - labor - direct)}</td></tr>
             `;
             return { premium, safe };
         }
 
         function copyQuote() {
             const client = document.getElementById('project-name').value || "Client";
-            const p = document.getElementById('res-premium').innerText;
-            const text = `Halo ${client}, salam kreatif!\n\nEstimasi investasi project adalah:\n🔥 *${p}*\n\n_Harga sudah mencakup jasa kreatif, gear, & operasional._\n\n_Sent via GoldenHour._`;
+            const text = `Halo ${client}, salam kreatif!\n\nEstimasi investasi project adalah:\n🔥 *${document.getElementById('res-premium').innerText}*\n\n_Harga mencakup jasa kreatif & operasional._\n\n_Sent via GoldenHour._`;
             navigator.clipboard.writeText(text);
-            toast("WhatsApp Text Copied!");
+            toast("WhatsApp Quote Copied!");
         }
 
+        // --- HISTORY LOGIC FIXED ---
         function saveToHistory() {
-            const n = document.getElementById('project-name').value || "Untitled";
-            history.unshift({ id: Date.now(), name: n, price: document.getElementById('res-premium').innerText });
-            localStorage.setItem('gh_v5_history', JSON.stringify(history));
+            const n = document.getElementById('project-name').value || "Untitled Project";
+            const data = {
+                id: Date.now(),
+                name: n,
+                prof: activeProf,
+                rate: document.getElementById('rate-jam').value,
+                jams: [1,2,3,4].map(i => document.getElementById('jam-'+i).value),
+                overhead: document.getElementById('overhead-cost').value,
+                costs: JSON.parse(JSON.stringify(costs)), // Deep copy
+                price: document.getElementById('res-premium').innerText
+            };
+            history.unshift(data);
+            if(history.length > 10) history.pop();
+            localStorage.setItem('gh_vfinal_history', JSON.stringify(history));
             renderHistory();
-            toast("Project Saved!");
+            toast("Project Archived!");
+        }
+
+        function loadHistory(id) {
+            const h = history.find(i => i.id === id);
+            if(!h) return;
+            document.getElementById('project-name').value = h.name;
+            document.getElementById('rate-jam').value = h.rate;
+            activeProf = h.prof;
+            renderButtons();
+            renderInputs(); // This will re-create inputs for the specific prof
+            h.jams.forEach((v, i) => document.getElementById('jam-'+(i+1)).value = v);
+            costs = [...h.costs];
+            document.getElementById('overhead-cost').value = h.overhead;
+            renderCosts(); // This updates the expense list UI and calls calculate()
+            toast("Project Loaded!");
         }
 
         function renderHistory() {
-            document.getElementById('history-list').innerHTML = history.slice(0, 8).map(i => `
-                <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5 text-[10px] font-bold uppercase">
-                    <span class="truncate pr-4">${i.name}</span>
-                    <span class="text-gold-500 font-mono">${i.price}</span>
+            document.getElementById('history-list').innerHTML = history.map(h => `
+                <div onclick="loadHistory(${h.id})" class="flex justify-between items-center p-3 bg-white/5 border border-white/5 rounded-xl text-[10px] font-bold uppercase cursor-pointer hover:border-gold-500 transition">
+                    <span class="truncate pr-4">${h.name}</span>
+                    <span class="text-gold-500 font-mono">${h.price}</span>
                 </div>
             `).join('');
         }
+        // ---------------------------
 
         function renderCosts() {
             document.getElementById('cost-list').innerHTML = costs.map((c, i) => `
                 <div class="flex gap-2">
-                    <input type="text" value="${c.name}" onchange="costs[${i}].name=this.value;calculate()" class="input-glass flex-1 p-2 rounded-lg text-[10px] font-bold uppercase">
+                    <input type="text" value="${c.name}" onchange="costs[${i}].name=this.value;calculate()" class="input-glass flex-1 p-2 rounded-lg text-[10px] font-bold uppercase tracking-widest">
                     <input type="number" value="${c.value}" onchange="costs[${i}].value=parseFloat(this.value)||0;calculate()" class="input-glass w-24 p-2 rounded-lg text-[10px] font-mono text-right font-bold">
                     <button onclick="costs.splice(${i},1);renderCosts()" class="text-red-500/50 px-1">✕</button>
                 </div>
@@ -268,7 +290,7 @@
             calculate();
         }
 
-        function addCost() { costs.push({ name: "NEW ITEM", value: 0 }); renderCosts(); }
+        function addCost() { costs.push({ name: "EXPENSE", value: 0 }); renderCosts(); }
         function toggleModal() { document.getElementById('gear-modal').classList.toggle('hidden'); }
         function calcGear(p) { document.getElementById('overhead-cost').value = Math.round((parseFloat(document.getElementById('total-asset-value').value)||0) * p); calculate(); toggleModal(); }
         function toast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2500); }
@@ -277,7 +299,7 @@
             const p = PROFESI[activeProf];
             document.getElementById('input-jam-container').innerHTML = `<div class="grid grid-cols-2 gap-4">${[1,2,3,4].map(i => `
                 <div class="space-y-1">
-                    <label class="text-[9px] font-bold text-stone-500 uppercase tracking-widest">${p['b'+i]}</label>
+                    <label class="text-[9px] font-bold text-stone-500 uppercase">${p['b'+i]}</label>
                     <input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-3 rounded-xl text-xl font-black calc-trigger text-center font-mono">
                 </div>`).join('')}</div>`;
             document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
