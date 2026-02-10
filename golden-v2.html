@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldenHour - Visual Pricing System</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -37,14 +36,22 @@
         .btn-profesi.active { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: black !important; font-weight: 800; }
         #login-overlay { transition: opacity 0.5s ease-out, visibility 0.5s; }
         .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* PRINT LOGIC */
+        @media print {
+            #main-app, #login-overlay, #toast, #gear-modal, .sticky { display: none !important; }
+            #pdf-template { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 40px !important; color: black !important; background: white !important; }
+            body { background: white !important; }
+        }
+        #pdf-template { display: none; }
     </style>
 </head>
 
-<body class="p-4 md:p-8 min-h-screen">
+<body class="p-4 md:p-8 min-h-screen overflow-x-hidden">
 
     <div id="login-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4">
         <div class="w-full max-w-md bg-[#1c1917] border border-white/10 p-10 rounded-[3xl] text-center shadow-2xl">
-            <h2 class="text-2xl font-black text-gold-500 mb-8 italic tracking-tighter">GoldenHour.</h2>
+            <h2 class="text-3xl font-black text-gold-500 mb-8 italic tracking-tighter">GoldenHour.</h2>
             <form onsubmit="checkLogin(event)" class="space-y-4">
                 <input type="password" id="password-input" placeholder="ACCESS CODE" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-center text-white tracking-[0.4em] outline-none">
                 <button type="submit" class="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gold-500 transition uppercase text-xs">Unlock</button>
@@ -53,11 +60,10 @@
     </div>
 
     <div id="main-app" class="max-w-6xl w-full mx-auto blur-sm opacity-50 pointer-events-none transition-all duration-500">
-        
         <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-stone-200 dark:border-white/10 pb-8">
             <div>
                 <h1 class="text-4xl font-black tracking-tighter">GoldenHour<span class="text-gold-500">.</span></h1>
-                <p class="text-stone-500 font-medium italic text-xs mt-1">Pricing for Professionals</p>
+                <p class="text-stone-500 font-medium italic text-xs mt-1">Professional Visual Pricing</p>
             </div>
             <div class="flex items-center gap-4">
                 <div id="profesi-container" class="flex flex-wrap gap-2"></div>
@@ -69,14 +75,14 @@
             <div class="lg:col-span-7 space-y-6">
                 <div class="card-glass p-6 rounded-3xl">
                     <label class="text-[10px] text-stone-500 font-bold uppercase tracking-widest mb-4 block">01. Project Name</label>
-                    <input type="text" id="project-name" placeholder="Nama Klien" class="input-glass w-full p-4 rounded-xl text-lg font-bold">
+                    <input type="text" id="project-name" placeholder="Brand / Client Name" class="input-glass w-full p-4 rounded-xl text-lg font-bold">
                 </div>
 
                 <div class="card-glass p-6 rounded-3xl">
                     <label class="text-[10px] text-stone-500 font-bold uppercase tracking-widest mb-4 block">02. Time & Labor</label>
                     <div id="input-jam-container" class="mb-6"></div>
                     <div class="pt-6 border-t border-white/5">
-                        <label class="text-[10px] font-bold text-gold-500 block mb-2 uppercase">Hourly Rate (Rp)</label>
+                        <label class="text-[10px] font-bold text-gold-500 block mb-2 uppercase tracking-widest">Rate Per Hour (IDR)</label>
                         <input type="number" id="rate-jam" value="250000" class="input-glass w-full p-4 rounded-xl text-2xl font-black calc-trigger font-mono">
                     </div>
                 </div>
@@ -87,8 +93,8 @@
                         <button onclick="addCost()" class="text-[10px] font-bold bg-gold-500/10 text-gold-600 px-3 py-1 rounded-lg">+ Add</button>
                     </div>
                     <div id="cost-list" class="space-y-3 mb-6"></div>
-                    <div class="pt-6 border-t border-white/5 flex flex-col gap-4">
-                        <div class="flex justify-between items-center">
+                    <div class="pt-6 border-t border-white/5">
+                        <div class="flex justify-between items-center mb-2">
                             <label class="text-[10px] font-bold text-stone-500 uppercase">Gear Asset Value</label>
                             <button onclick="toggleModal()" class="text-[9px] font-bold text-gold-600 underline uppercase">Gear Calc</button>
                         </div>
@@ -104,8 +110,8 @@
                         <h2 id="res-premium" class="text-5xl font-black tracking-tighter mb-8">Rp 0</h2>
                         
                         <div class="p-4 bg-white/5 rounded-2xl border border-white/5 mb-8">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-bold text-white/50 uppercase">Safe Limit</span>
+                            <div class="flex justify-between items-center mb-1 text-white/50">
+                                <span class="text-[10px] font-bold uppercase">Safe Limit</span>
                                 <span id="res-aman" class="font-black text-xl">Rp 0</span>
                             </div>
                         </div>
@@ -113,105 +119,91 @@
                         <div class="grid grid-cols-1 gap-3">
                             <button onclick="copyQuote()" class="w-full py-4 bg-gold-500 text-black rounded-xl font-black uppercase text-xs tracking-widest">Copy For WhatsApp</button>
                             <div class="flex gap-2">
-                                <button onclick="saveToHistory()" class="flex-1 py-4 bg-white/5 rounded-xl font-black uppercase text-[10px] border border-white/10">Save History</button>
-                                <button onclick="exportPDF()" class="flex-1 py-4 bg-white text-black rounded-xl font-black uppercase text-[10px] tracking-widest">Download PDF</button>
+                                <button onclick="saveToHistory()" class="flex-1 py-4 bg-white/5 rounded-xl font-black uppercase text-[10px] border border-white/10 tracking-widest">Save History</button>
+                                <button onclick="window.print()" class="flex-1 py-4 bg-white text-black rounded-xl font-black uppercase text-[10px] tracking-widest">Print / PDF</button>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-glass p-6 rounded-[2.5rem]">
                         <h3 class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-4 italic">Recent Projects</h3>
-                        <div id="history-list" class="space-y-3 max-h-60 overflow-y-auto"></div>
+                        <div id="history-list" class="space-y-3"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="pdf-template" style="position:fixed; left:-9999px; top:0; width:800px; background:white; color:black; padding:60px;">
-        <div style="border-bottom: 5px solid black; padding-bottom: 30px; margin-bottom: 40px; display: flex; justify-content: space-between;">
+    <div id="pdf-template">
+        <div style="border-bottom: 5px solid black; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between;">
             <div>
-                <h1 style="font-size: 40px; font-weight: 900; letter-spacing: -2px; margin: 0;">GOLDENHOUR.</h1>
-                <p style="text-transform: uppercase; font-size: 10px; font-weight: bold; color: #777; letter-spacing: 2px;">Visual Service Quotation</p>
+                <h1 style="font-size: 32px; font-weight: 900; letter-spacing: -1.5px; margin: 0; font-style: italic;">GOLDENHOUR.</h1>
+                <p style="text-transform: uppercase; font-size: 9px; font-weight: bold; color: #666; letter-spacing: 2px;">Visual Project Quotation</p>
             </div>
             <div style="text-align: right;">
-                <p style="font-size: 10px; color: #999; margin: 0;">Date: <span id="pdf-date"></span></p>
+                <p style="font-size: 10px; font-weight: bold; margin: 0;">DATE: <span id="pdf-date"></span></p>
+                <p style="font-size: 10px; font-weight: bold; margin: 0; color: #999;">REF: GH-001</p>
             </div>
         </div>
-        
-        <div style="margin-bottom: 50px;">
-            <p style="font-size: 10px; font-weight: bold; color: #aaa; text-transform: uppercase; margin-bottom: 5px;">Client</p>
-            <h2 id="pdf-client" style="font-size: 28px; font-weight: 900; margin: 0;">Client Name</h2>
+        <div style="margin-bottom: 40px;">
+            <p style="font-size: 9px; font-weight: bold; color: #999; text-transform: uppercase; margin-bottom: 5px;">Prepared For</p>
+            <h2 id="pdf-client" style="font-size: 24px; font-weight: 900; margin: 0;"></h2>
         </div>
-
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 50px;">
-            <tr style="border-bottom: 2px solid #eee; text-align: left; font-size: 10px; text-transform: uppercase; color: #aaa;">
-                <th style="padding-bottom: 15px;">Service Description</th>
-                <th style="padding-bottom: 15px; text-align: right;">Amount (IDR)</th>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+            <tr style="border-bottom: 2px solid black; text-align: left; font-size: 10px; text-transform: uppercase; font-weight: 900;">
+                <th style="padding-bottom: 10px;">Description</th>
+                <th style="padding-bottom: 10px; text-align: right;">Amount (IDR)</th>
             </tr>
-            <tbody id="pdf-items" style="font-size: 13px; font-weight: bold;"></tbody>
+            <tbody id="pdf-items" style="font-size: 12px; font-weight: 700;"></tbody>
         </table>
-
-        <div style="display: flex; justify-content: flex-end; border-top: 3px solid black; padding-top: 20px;">
-            <div style="width: 300px; text-align: right;">
-                <p style="font-size: 10px; font-weight: 900; text-transform: uppercase; margin: 0;">Total Project Investment</p>
-                <h3 id="pdf-total" style="font-size: 32px; font-weight: 900; margin: 0;"></h3>
+        <div style="display: flex; justify-content: flex-end;">
+            <div style="width: 250px; border-top: 3px solid black; padding-top: 15px; text-align: right;">
+                <p style="font-size: 9px; font-weight: 900; text-transform: uppercase; margin: 0;">Total Investment</p>
+                <h3 id="pdf-total" style="font-size: 28px; font-weight: 900; margin: 0;"></h3>
             </div>
         </div>
-        
-        <div style="margin-top: 100px; font-size: 9px; color: #aaa; font-style: italic;">
-            * Official quotation generated by GoldenHour. Valid for 14 days from issue date.
+        <div style="margin-top: 60px; border-top: 1px solid #eee; padding-top: 20px; font-size: 8px; color: #999; font-style: italic;">
+            * This is an official quotation. Prices are calculated based on creative labor and operational standards. Valid for 14 days.
         </div>
     </div>
 
-    <div id="gear-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
-        <div class="bg-stone-900 border border-white/10 w-full max-w-md p-8 rounded-[2.5rem]">
-            <h3 class="text-2xl font-black text-white mb-6 tracking-tighter italic">Gear Asset Calculation</h3>
-            <div class="space-y-6">
+    <div id="gear-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+        <div class="bg-stone-900 border border-white/10 w-full max-w-md p-10 rounded-[3rem] shadow-2xl">
+            <h3 class="text-3xl font-black text-white mb-2 tracking-tighter italic">Gear Calculator</h3>
+            <p class="text-stone-500 text-xs mb-10 italic">Input total asset value to calculate depreciation.</p>
+            <div class="space-y-8">
                 <div>
-                    <label class="text-[10px] font-bold text-stone-500 uppercase block mb-2 tracking-widest">Total Harga Asset Alat</label>
-                    <input type="number" id="total-asset-value" placeholder="Contoh: 40000000" class="w-full bg-black border border-white/10 rounded-2xl p-5 text-white font-mono text-xl outline-none focus:border-gold-500">
+                    <label class="text-[11px] font-black text-gold-500 uppercase block mb-3 tracking-[0.2em]">Total Asset Value (Rp)</label>
+                    <input type="number" id="total-asset-value" placeholder="Contoh: 50000000" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-white font-mono text-2xl outline-none focus:border-gold-500 shadow-inner">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="calcGear(0.015)" class="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition">
-                        <span class="block text-2xl font-black text-white">1.5%</span>
-                        <span class="text-[10px] text-stone-500 font-bold uppercase">Standard</span>
+                    <button onclick="calcGear(0.015)" class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition group">
+                        <span class="block text-3xl font-black text-white group-hover:text-gold-500">1.5%</span>
+                        <span class="text-xs text-stone-500 font-bold uppercase tracking-widest">Standard Rate</span>
                     </button>
-                    <button onclick="calcGear(0.03)" class="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition">
-                        <span class="block text-2xl font-black text-white">3.0%</span>
-                        <span class="text-[10px] text-stone-500 font-bold uppercase">Heavy Use</span>
+                    <button onclick="calcGear(0.03)" class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-gold-500 text-left transition group">
+                        <span class="block text-3xl font-black text-white group-hover:text-gold-500">3.0%</span>
+                        <span class="text-xs text-stone-500 font-bold uppercase tracking-widest">High Usage</span>
                     </button>
                 </div>
-                <button onclick="toggleModal()" class="w-full text-stone-600 text-[10px] font-bold uppercase mt-4">Close</button>
+                <button onclick="toggleModal()" class="w-full text-stone-600 text-[10px] font-black uppercase mt-4 tracking-[0.3em]">Cancel</button>
             </div>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 hidden px-8 py-5 bg-emerald-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl z-[300]"></div>
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 hidden px-8 py-4 bg-emerald-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-2xl z-[300]"></div>
 
     <script>
         const PROFESI = {
-            "Fotografer": { b1: "Pre-Production", v1: 1, b2: "Shoot Day", v2: 4, b3: "Post-Production", v3: 4, b4: "Admin/Deliv", v4: 1 },
-            "Videografer": { b1: "Storyboarding", v1: 2, b2: "Production", v2: 6, b3: "Post-Production", v3: 8, b4: "Revisions", v4: 2 }
+            "Fotografer": { b1: "Pre-Production", v1: 1, b2: "Shooting", v2: 4, b3: "Editing", v3: 4, b4: "Delivery", v4: 1 },
+            "Videografer": { b1: "Storyboarding", v1: 2, b2: "Production", v2: 6, b3: "Post-Prod", v3: 8, b4: "Revision", v4: 2 }
         };
         const SECRET = "cjR0M2M0cmQ=";
         let costs = [ { name: "Transport & Parking", value: 100000 }, { name: "Crew Meals", value: 50000 } ];
         let activeProf = "Fotografer";
-        let history = JSON.parse(localStorage.getItem('gh_v4_history') || '[]');
+        let history = JSON.parse(localStorage.getItem('gh_v5_history') || '[]');
 
-        function checkLogin(e) {
-            e.preventDefault();
-            if (btoa(document.getElementById('password-input').value) === SECRET) {
-                localStorage.setItem('gh_access', 'true');
-                unlock();
-            }
-        }
-
-        function unlock() {
-            document.getElementById('login-overlay').classList.add('hidden-overlay');
-            document.getElementById('main-app').classList.remove('blur-sm', 'opacity-50', 'pointer-events-none');
-        }
-
+        function checkLogin(e) { e.preventDefault(); if (btoa(document.getElementById('password-input').value) === SECRET) { localStorage.setItem('gh_access', 'true'); unlock(); } }
+        function unlock() { document.getElementById('login-overlay').classList.add('hidden-overlay'); document.getElementById('main-app').classList.remove('blur-sm', 'opacity-50', 'pointer-events-none'); }
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
         function format(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
 
@@ -220,7 +212,6 @@
             const rate = parseFloat(document.getElementById('rate-jam').value) || 0;
             const direct = costs.reduce((a, b) => a + b.value, 0);
             const overhead = parseFloat(document.getElementById('overhead-cost').value) || 0;
-            
             const labor = (j.reduce((a, b) => a + b, 0)) * rate;
             const base = labor + direct + overhead;
             const safe = base * 1.3;
@@ -228,66 +219,38 @@
 
             document.getElementById('res-aman').innerText = format(safe);
             document.getElementById('res-premium').innerText = format(premium);
-            return { labor, direct, overhead, premium, safe, totalJam: j.reduce((a,b)=>a+b, 0) };
+
+            // Sync with PDF Template
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+            document.getElementById('pdf-client').innerText = document.getElementById('project-name').value || "CLIENT NAME";
+            document.getElementById('pdf-total').innerText = format(premium);
+            document.getElementById('pdf-items').innerHTML = `
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Creative Labor & Skills</td><td style="text-align: right; padding: 10px 0;">${format(labor)}</td></tr>
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Operational & Expenses</td><td style="text-align: right; padding: 10px 0;">${format(direct)}</td></tr>
+                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 10px 0;">Depreciation & Professional Margin</td><td style="text-align: right; padding: 10px 0;">${format(premium - labor - direct)}</td></tr>
+            `;
+            return { premium, safe };
         }
 
         function copyQuote() {
-            const client = document.getElementById('project-name').value || "Klien";
+            const client = document.getElementById('project-name').value || "Client";
             const p = document.getElementById('res-premium').innerText;
-            // Clean Text For Client
-            const text = `Halo ${client}, salam kreatif!\n\nEstimasi investasi untuk project ini adalah:\n🔥 *${p}*\n\n_Harga sudah mencakup jasa kreatif, manajemen gear, & biaya operasional._\n\n_Generated by GoldenHour._`;
+            const text = `Halo ${client}, salam kreatif!\n\nEstimasi investasi project adalah:\n🔥 *${p}*\n\n_Harga sudah mencakup jasa kreatif, gear, & operasional._\n\n_Sent via GoldenHour._`;
             navigator.clipboard.writeText(text);
-            toast("Text Disalin (Tanpa Internal Info)!");
-        }
-
-        async function exportPDF() {
-            const res = calculate();
-            const client = document.getElementById('project-name').value || "Client Name";
-            
-            // Populate Template
-            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
-            document.getElementById('pdf-client').innerText = client;
-            document.getElementById('pdf-total').innerText = format(res.premium);
-            document.getElementById('pdf-items').innerHTML = `
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 15px 0; color: #666; font-style: italic;">Creative Labor (${res.totalJam} Hours)</td><td style="text-align: right; padding: 15px 0;">${format(res.labor)}</td></tr>
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 15px 0; color: #666; font-style: italic;">Direct Expenses (Transport/Meals/Ops)</td><td style="text-align: right; padding: 15px 0;">${format(res.direct)}</td></tr>
-                <tr style="border-bottom: 1px solid #eee;"><td style="padding: 15px 0; color: #666; font-style: italic;">Gear Licensing & Professional Margin</td><td style="text-align: right; padding: 15px 0;">${format(res.premium - res.labor - res.direct)}</td></tr>
-            `;
-
-            const element = document.getElementById('pdf-template');
-            const opt = {
-                margin: 0,
-                filename: `Quote_${client.replace(/\s+/g, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 3, useCORS: true, logging: true },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            toast("Processing PDF...");
-            // Force template to be visible to the engine briefly
-            element.style.left = "0px";
-            element.style.position = "absolute";
-            
-            setTimeout(() => {
-                html2pdf().set(opt).from(element).save().then(() => {
-                    element.style.left = "-9999px";
-                    element.style.position = "fixed";
-                    toast("PDF Berhasil Didownload!");
-                });
-            }, 500);
+            toast("WhatsApp Text Copied!");
         }
 
         function saveToHistory() {
             const n = document.getElementById('project-name').value || "Untitled";
             history.unshift({ id: Date.now(), name: n, price: document.getElementById('res-premium').innerText });
-            localStorage.setItem('gh_v4_history', JSON.stringify(history));
+            localStorage.setItem('gh_v5_history', JSON.stringify(history));
             renderHistory();
-            toast("Project Archived!");
+            toast("Project Saved!");
         }
 
         function renderHistory() {
-            document.getElementById('history-list').innerHTML = history.slice(0, 10).map(i => `
-                <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5 text-[10px] font-bold uppercase tracking-tight">
+            document.getElementById('history-list').innerHTML = history.slice(0, 8).map(i => `
+                <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5 text-[10px] font-bold uppercase">
                     <span class="truncate pr-4">${i.name}</span>
                     <span class="text-gold-500 font-mono">${i.price}</span>
                 </div>
@@ -296,8 +259,8 @@
 
         function renderCosts() {
             document.getElementById('cost-list').innerHTML = costs.map((c, i) => `
-                <div class="flex gap-2 animate-up">
-                    <input type="text" value="${c.name}" onchange="costs[${i}].name=this.value;calculate()" class="input-glass flex-1 p-2 rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                <div class="flex gap-2">
+                    <input type="text" value="${c.name}" onchange="costs[${i}].name=this.value;calculate()" class="input-glass flex-1 p-2 rounded-lg text-[10px] font-bold uppercase">
                     <input type="number" value="${c.value}" onchange="costs[${i}].value=parseFloat(this.value)||0;calculate()" class="input-glass w-24 p-2 rounded-lg text-[10px] font-mono text-right font-bold">
                     <button onclick="costs.splice(${i},1);renderCosts()" class="text-red-500/50 px-1">✕</button>
                 </div>
@@ -305,7 +268,7 @@
             calculate();
         }
 
-        function addCost() { costs.push({ name: "NEW EXPENSE", value: 0 }); renderCosts(); }
+        function addCost() { costs.push({ name: "NEW ITEM", value: 0 }); renderCosts(); }
         function toggleModal() { document.getElementById('gear-modal').classList.toggle('hidden'); }
         function calcGear(p) { document.getElementById('overhead-cost').value = Math.round((parseFloat(document.getElementById('total-asset-value').value)||0) * p); calculate(); toggleModal(); }
         function toast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 2500); }
@@ -314,7 +277,7 @@
             const p = PROFESI[activeProf];
             document.getElementById('input-jam-container').innerHTML = `<div class="grid grid-cols-2 gap-4">${[1,2,3,4].map(i => `
                 <div class="space-y-1">
-                    <label class="text-[9px] font-bold text-stone-500 uppercase italic tracking-widest">${p['b'+i]}</label>
+                    <label class="text-[9px] font-bold text-stone-500 uppercase tracking-widest">${p['b'+i]}</label>
                     <input type="number" id="jam-${i}" value="${p['v'+i]}" class="input-glass w-full p-3 rounded-xl text-xl font-black calc-trigger text-center font-mono">
                 </div>`).join('')}</div>`;
             document.querySelectorAll('.calc-trigger').forEach(el => el.addEventListener('input', calculate));
@@ -323,14 +286,11 @@
 
         function renderButtons() {
             document.getElementById('profesi-container').innerHTML = Object.keys(PROFESI).map(p => `
-                <button onclick="activeProf='${p}';renderButtons();renderInputs()" class="btn-profesi px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-white/5 ${p === activeProf ? 'active' : ''}">${p}</button>
+                <button onclick="activeProf='${p}';renderButtons();renderInputs()" class="btn-profesi px-4 py-2 rounded-xl text-[9px] font-black uppercase border border-white/5 ${p === activeProf ? 'active' : ''}">${p}</button>
             `).join('');
         }
 
-        window.onload = () => {
-            if(localStorage.getItem('gh_access')==='true') unlock();
-            renderButtons(); renderInputs(); renderCosts(); renderHistory();
-        }
+        window.onload = () => { if(localStorage.getItem('gh_access')==='true') unlock(); renderButtons(); renderInputs(); renderCosts(); renderHistory(); }
     </script>
 </body>
 </html>
